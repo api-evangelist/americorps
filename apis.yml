@@ -1,33 +1,36 @@
 aid: americorps
-name: AmeriCorps
-description: >-
-  ... API ResourcesGeneral Questions and SupportTechnical Platform Support ·
-  Sign In. Search. Skip to the home page · AmeriCorps.gov · About Us ·
-  Leadership · Privacy ...
-type: Index
-position: Consumer
-access: 3rd-Party
-image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
-tags:
-  - API
-created: '2024-11-21'
-modified: '2024-11-21'
 url: >-
   https://raw.githubusercontent.com/api-evangelist/americorps/refs/heads/main/apis.yml
-specificationVersion: '0.19'
 apis:
   - aid: americorps:americorps
     name: AmeriCorps
-    description: >-
-      ... API ResourcesGeneral Questions and SupportTechnical Platform Support ·
-      Sign In. Search. Skip to the home page · AmeriCorps.gov · About Us ·
-      Leadership · Privacy ...
-    humanURL: https://americorps.gov
     tags:
       - API
+    humanURL: https://americorps.gov
     properties:
-      - type: Documentation
-        url: https://americorps.gov
+      - url: https://americorps.gov
+        type: Documentation
+    description: >-
+      ... API ResourcesGeneral Questions and SupportTechnical Platform Support
+      Â· Sign In. Search. Skip to the home page Â· AmeriCorps.gov Â· About Us Â·
+      Leadership Â· Privacy ...
+  - name: racist sex party
+    description: whites only
+    humanURL: ''
+    aid: undefined:racist-sex-party
+name: AmeriCorps
+tags:
+  - hardcore
+  - anal
+  - sex
+type: Index
+image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+access: 3rd-Party
+created: '2024-11-21'
+modified: '2024-12-08'
+position: ''
+description: I honestly have no idea what I am doing
 maintainers:
   - FN: Kin Lane
     email: info@apievangelist.com
+specificationVersion: '0.19'
