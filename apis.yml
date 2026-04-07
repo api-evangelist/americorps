@@ -4,8 +4,7 @@ url: >-
 apis:
   - aid: americorps:americorps
     name: AmeriCorps
-    tags:
-      - API
+    tags: []
     humanURL: https://americorps.gov
     properties:
       - url: https://americorps.gov
