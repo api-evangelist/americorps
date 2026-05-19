@@ -45,6 +45,8 @@ apis:
       Data is available in JSON, CSV, XML, and RDF formats, with OData endpoints for
       connecting to tools like Excel and Tableau.
 common:
+  - type: LinkedIn
+    url: https://www.linkedin.com/company/americorps
   - type: Website
     url: https://americorps.gov
   - type: Portal
