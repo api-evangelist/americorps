@@ -1,0 +1,188 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "AmeriCorps Open Data API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Catalog",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List datasets and assets",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://data.americorps.gov/api/views",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of assets to return."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number for paginated catalog responses."
+              }
+            ]
+          },
+          "docs": "Returns a JSON list of all datasets, views, charts, and assets published\non the AmeriCorps open data portal. Useful for discovery and for\nretrieving dataset identifiers (`id`) needed to call `/resource/{id}`.\n"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Metadata",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get dataset metadata",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://data.americorps.gov/api/views/:dataset_id.json",
+            "params": [
+              {
+                "name": "dataset_id",
+                "value": "",
+                "type": "path",
+                "description": "Socrata four-by-four dataset identifier (e.g. `bkv2-68b9`)."
+              }
+            ]
+          },
+          "docs": "Returns the metadata record for a single dataset, including its columns,\ndescription, tags, and update cadence.\n"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Datasets",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Query a dataset (JSON)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://data.americorps.gov/resource/:dataset_id.json",
+            "params": [
+              {
+                "name": "dataset_id",
+                "value": "",
+                "type": "path",
+                "description": "Socrata four-by-four dataset identifier (e.g. `bkv2-68b9`)."
+              },
+              {
+                "name": "$select",
+                "value": "",
+                "type": "query",
+                "description": "SoQL `$select` clause specifying which columns to return."
+              },
+              {
+                "name": "$where",
+                "value": "",
+                "type": "query",
+                "description": "SoQL `$where` filter clause."
+              },
+              {
+                "name": "$order",
+                "value": "",
+                "type": "query",
+                "description": "SoQL `$order` clause for sorting results."
+              },
+              {
+                "name": "$group",
+                "value": "",
+                "type": "query",
+                "description": "SoQL `$group` clause for aggregations."
+              },
+              {
+                "name": "$limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of rows to return (default 1000, max 50000)."
+              },
+              {
+                "name": "$offset",
+                "value": "",
+                "type": "query",
+                "description": "Row offset for paginating results."
+              },
+              {
+                "name": "$q",
+                "value": "",
+                "type": "query",
+                "description": "Full-text search query."
+              }
+            ]
+          },
+          "docs": "Returns rows from the specified dataset as JSON. Supports the Socrata\nSODA SoQL query parameters (`$select`, `$where`, `$order`, `$group`,\n`$limit`, `$offset`, `$q`).\n"
+        },
+        {
+          "info": {
+            "name": "Query a dataset (CSV)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://data.americorps.gov/resource/:dataset_id.csv",
+            "params": [
+              {
+                "name": "dataset_id",
+                "value": "",
+                "type": "path",
+                "description": "Socrata four-by-four dataset identifier (e.g. `bkv2-68b9`)."
+              },
+              {
+                "name": "$select",
+                "value": "",
+                "type": "query",
+                "description": "SoQL `$select` clause specifying which columns to return."
+              },
+              {
+                "name": "$where",
+                "value": "",
+                "type": "query",
+                "description": "SoQL `$where` filter clause."
+              },
+              {
+                "name": "$order",
+                "value": "",
+                "type": "query",
+                "description": "SoQL `$order` clause for sorting results."
+              },
+              {
+                "name": "$limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of rows to return (default 1000, max 50000)."
+              },
+              {
+                "name": "$offset",
+                "value": "",
+                "type": "query",
+                "description": "Row offset for paginating results."
+              }
+            ]
+          },
+          "docs": "Returns rows from the specified dataset as CSV."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

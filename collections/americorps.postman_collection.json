@@ -1,0 +1,652 @@
+{
+  "item": [
+    {
+      "id": "bc00468c-8c1a-41e1-b8fd-add3901e08bf",
+      "name": "Catalog",
+      "description": {
+        "content": "Discover datasets published on the AmeriCorps open data portal.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "879f3fe6-2158-4ea1-a2f4-1d1a1d260783",
+          "name": "List datasets and assets",
+          "request": {
+            "name": "List datasets and assets",
+            "description": {
+              "content": "Returns a JSON list of all datasets, views, charts, and assets published\non the AmeriCorps open data portal. Useful for discovery and for\nretrieving dataset identifiers (`id`) needed to call `/resource/{id}`.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "views"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "Maximum number of assets to return."
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "<integer>",
+                  "description": "Page number for paginated catalog responses."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b74b5036-ae24-4158-8d31-6dfb83a4ae33",
+              "name": "Array of dataset/view metadata records.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "views"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"string\",\n    \"name\": \"string\",\n    \"description\": \"string\",\n    \"category\": \"string\",\n    \"tags\": [\n      \"string\",\n      \"string\"\n    ],\n    \"createdAt\": 2633,\n    \"rowsUpdatedAt\": 3409,\n    \"viewCount\": 3858,\n    \"downloadCount\": 5776,\n    \"columns\": [\n      {\n        \"key_0\": 9948.314924735103\n      },\n      {\n        \"key_0\": false,\n        \"key_1\": \"string\"\n      }\n    ]\n  },\n  {\n    \"id\": \"string\",\n    \"name\": \"string\",\n    \"description\": \"string\",\n    \"category\": \"string\",\n    \"tags\": [\n      \"string\",\n      \"string\"\n    ],\n    \"createdAt\": 9835,\n    \"rowsUpdatedAt\": 4431,\n    \"viewCount\": 8346,\n    \"downloadCount\": 2649,\n    \"columns\": [\n      {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\"\n      },\n      {\n        \"key_0\": false\n      }\n    ]\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "4e541ac2-31ea-47d5-a2ee-7e1c22fce8fe",
+      "name": "Datasets",
+      "description": {
+        "content": "Retrieve dataset rows via the Socrata SODA resource endpoint.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "1c05bc90-5ccb-4156-985a-2ae67d85c5d0",
+          "name": "Query a dataset (JSON)",
+          "request": {
+            "name": "Query a dataset (JSON)",
+            "description": {
+              "content": "Returns rows from the specified dataset as JSON. Supports the Socrata\nSODA SoQL query parameters (`$select`, `$where`, `$order`, `$group`,\n`$limit`, `$offset`, `$q`).\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "resource",
+                "{{dataset_id}}.json"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "$select",
+                  "value": "<string>",
+                  "description": "SoQL `$select` clause specifying which columns to return."
+                },
+                {
+                  "disabled": false,
+                  "key": "$where",
+                  "value": "<string>",
+                  "description": "SoQL `$where` filter clause."
+                },
+                {
+                  "disabled": false,
+                  "key": "$order",
+                  "value": "<string>",
+                  "description": "SoQL `$order` clause for sorting results."
+                },
+                {
+                  "disabled": false,
+                  "key": "$group",
+                  "value": "<string>",
+                  "description": "SoQL `$group` clause for aggregations."
+                },
+                {
+                  "disabled": false,
+                  "key": "$limit",
+                  "value": "<integer>",
+                  "description": "Maximum number of rows to return (default 1000, max 50000)."
+                },
+                {
+                  "disabled": false,
+                  "key": "$offset",
+                  "value": "<integer>",
+                  "description": "Row offset for paginating results."
+                },
+                {
+                  "disabled": false,
+                  "key": "$q",
+                  "value": "<string>",
+                  "description": "Full-text search query."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "de3336df-bd7a-4226-ab23-5c37afb17fd0",
+              "name": "Array of dataset rows.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "resource",
+                    "{{dataset_id}}.json"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "$select",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "$where",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "$order",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "$group",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "$limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "$offset",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "$q",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"key_0\": true,\n    \"key_1\": \"string\",\n    \"key_2\": 9247.16247229914,\n    \"key_3\": false,\n    \"key_4\": \"string\"\n  },\n  {\n    \"key_0\": 3432,\n    \"key_1\": false\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "61840ffa-f819-41dc-9eaa-5e5f2fcbc71b",
+              "name": "Invalid SoQL query.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "resource",
+                    "{{dataset_id}}.json"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "$select",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "$where",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "$order",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "$group",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "$limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "$offset",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "$q",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "adc65f1e-5053-4007-8b26-e27b8ea41533",
+              "name": "Dataset not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "resource",
+                    "{{dataset_id}}.json"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "$select",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "$where",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "$order",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "$group",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "$limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "$offset",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "$q",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5cab5169-ee05-4c96-838f-850fa07fd7c3",
+          "name": "Query a dataset (CSV)",
+          "request": {
+            "name": "Query a dataset (CSV)",
+            "description": {
+              "content": "Returns rows from the specified dataset as CSV.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "resource",
+                "{{dataset_id}}.csv"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "$select",
+                  "value": "<string>",
+                  "description": "SoQL `$select` clause specifying which columns to return."
+                },
+                {
+                  "disabled": false,
+                  "key": "$where",
+                  "value": "<string>",
+                  "description": "SoQL `$where` filter clause."
+                },
+                {
+                  "disabled": false,
+                  "key": "$order",
+                  "value": "<string>",
+                  "description": "SoQL `$order` clause for sorting results."
+                },
+                {
+                  "disabled": false,
+                  "key": "$limit",
+                  "value": "<integer>",
+                  "description": "Maximum number of rows to return (default 1000, max 50000)."
+                },
+                {
+                  "disabled": false,
+                  "key": "$offset",
+                  "value": "<integer>",
+                  "description": "Row offset for paginating results."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/csv"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "62562f81-0ca7-4b3d-a4c6-3a0a81e11c1f",
+              "name": "CSV-formatted dataset rows.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "resource",
+                    "{{dataset_id}}.csv"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "$select",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "$where",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "$order",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "$limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "$offset",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/csv"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/csv"
+                }
+              ],
+              "body": "string",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "c35fac9a-142a-47dc-b30b-b8723a66e3ce",
+      "name": "Metadata",
+      "description": {
+        "content": "Retrieve dataset metadata and schema information.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "1d8ea0c5-9578-4be6-b6cc-daea8d13841c",
+          "name": "Get dataset metadata",
+          "request": {
+            "name": "Get dataset metadata",
+            "description": {
+              "content": "Returns the metadata record for a single dataset, including its columns,\ndescription, tags, and update cadence.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "views",
+                "{{dataset_id}}.json"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e7e09b1b-9350-4f0f-86f4-056cdd659d51",
+              "name": "Dataset metadata.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "views",
+                    "{{dataset_id}}.json"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"name\": \"string\",\n  \"description\": \"string\",\n  \"category\": \"string\",\n  \"tags\": [\n    \"string\",\n    \"string\"\n  ],\n  \"createdAt\": 9105,\n  \"rowsUpdatedAt\": 5362,\n  \"viewCount\": 8587,\n  \"downloadCount\": 776,\n  \"columns\": [\n    {\n      \"key_0\": \"string\",\n      \"key_1\": \"string\",\n      \"key_2\": 7497\n    },\n    {\n      \"key_0\": 8730,\n      \"key_1\": 855\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ebf0e92c-e5ab-455b-bafc-ee69ab21457b",
+              "name": "Dataset not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "views",
+                    "{{dataset_id}}.json"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://data.americorps.gov",
+      "key": "baseUrl"
+    },
+    {
+      "disabled": false,
+      "description": {
+        "content": "(Required) Socrata four-by-four dataset identifier (e.g. `bkv2-68b9`).",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "<string>",
+      "key": "dataset_id"
+    }
+  ],
+  "auth": {
+    "type": "noauth"
+  },
+  "info": {
+    "_postman_id": "6251bd0d-6600-482a-8e21-ab5e9bac8521",
+    "name": "AmeriCorps Open Data API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "AmeriCorps publishes research, evaluation, and program data through its open\ndata portal at https://data.americorps.gov, which is built on the Socrata\nOpen Data (SODA) platform. Datasets are accessible programmatically through\nthe standard Socrata views and resource endpoints.\n\nEach dataset is identified by a four-by-four (`xxxx-xxxx`) identifier and can\nbe queried via the `/resource/{dataset_id}.{format}` endpoint using SoQL\n(Socrata Query Language) parameters such as `$select`, `$where`, `$order`,\n`$limit`, and `$offset`.\n\n\nContact Support:\n Name: AmeriCorps Open Data",
+      "type": "text/plain"
+    }
+  }
+}
