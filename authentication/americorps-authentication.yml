@@ -1,0 +1,18 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/americorps-openapi.yml
+summary:
+  types:
+  - apiKey
+  api_key_in:
+  - header
+schemes:
+- name: SocrataAppToken
+  type: apiKey
+  in: header
+  parameter: X-App-Token
+  description: |-
+    Optional Socrata application token. Anonymous access is allowed, but
+    requests without a token are subject to lower throttling limits.
+  sources:
+  - openapi/americorps-openapi.yml
