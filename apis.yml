@@ -45,6 +45,8 @@ apis:
       Data is available in JSON, CSV, XML, and RDF formats, with OData endpoints for
       connecting to tools like Excel and Tableau.
 common:
+  - type: AgenticAccess
+    url: agentic-access/americorps-agentic-access.yml
   - type: DomainSecurity
     url: security/americorps-domain-security.yml
   - type: Authentication
