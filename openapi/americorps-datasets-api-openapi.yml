@@ -1,0 +1,164 @@
+openapi: 3.1.0
+info:
+  title: AmeriCorps Open Data Catalog Datasets API
+  version: 1.0.0
+  description: 'AmeriCorps publishes research, evaluation, and program data through its open
+
+    data portal at https://data.americorps.gov, which is built on the Socrata
+
+    Open Data (SODA) platform. Datasets are accessible programmatically through
+
+    the standard Socrata views and resource endpoints.
+
+
+    Each dataset is identified by a four-by-four (`xxxx-xxxx`) identifier and can
+
+    be queried via the `/resource/{dataset_id}.{format}` endpoint using SoQL
+
+    (Socrata Query Language) parameters such as `$select`, `$where`, `$order`,
+
+    `$limit`, and `$offset`.
+
+    '
+  contact:
+    name: AmeriCorps Open Data
+    url: https://data.americorps.gov
+servers:
+- url: https://data.americorps.gov
+  description: AmeriCorps Open Data portal (Socrata)
+security:
+- {}
+- SocrataAppToken: []
+tags:
+- name: Datasets
+  description: Retrieve dataset rows via the Socrata SODA resource endpoint.
+paths:
+  /resource/{dataset_id}.json:
+    get:
+      tags:
+      - Datasets
+      summary: Query a dataset (JSON)
+      description: 'Returns rows from the specified dataset as JSON. Supports the Socrata
+
+        SODA SoQL query parameters (`$select`, `$where`, `$order`, `$group`,
+
+        `$limit`, `$offset`, `$q`).
+
+        '
+      operationId: getDatasetJson
+      parameters:
+      - $ref: '#/components/parameters/DatasetId'
+      - $ref: '#/components/parameters/SoqlSelect'
+      - $ref: '#/components/parameters/SoqlWhere'
+      - $ref: '#/components/parameters/SoqlOrder'
+      - $ref: '#/components/parameters/SoqlGroup'
+      - $ref: '#/components/parameters/SoqlLimit'
+      - $ref: '#/components/parameters/SoqlOffset'
+      - $ref: '#/components/parameters/SoqlQ'
+      responses:
+        '200':
+          description: Array of dataset rows.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  additionalProperties: true
+        '400':
+          description: Invalid SoQL query.
+        '404':
+          description: Dataset not found.
+  /resource/{dataset_id}.csv:
+    get:
+      tags:
+      - Datasets
+      summary: Query a dataset (CSV)
+      description: Returns rows from the specified dataset as CSV.
+      operationId: getDatasetCsv
+      parameters:
+      - $ref: '#/components/parameters/DatasetId'
+      - $ref: '#/components/parameters/SoqlSelect'
+      - $ref: '#/components/parameters/SoqlWhere'
+      - $ref: '#/components/parameters/SoqlOrder'
+      - $ref: '#/components/parameters/SoqlLimit'
+      - $ref: '#/components/parameters/SoqlOffset'
+      responses:
+        '200':
+          description: CSV-formatted dataset rows.
+          content:
+            text/csv:
+              schema:
+                type: string
+components:
+  parameters:
+    SoqlOrder:
+      name: $order
+      in: query
+      required: false
+      description: SoQL `$order` clause for sorting results.
+      schema:
+        type: string
+    SoqlGroup:
+      name: $group
+      in: query
+      required: false
+      description: SoQL `$group` clause for aggregations.
+      schema:
+        type: string
+    SoqlSelect:
+      name: $select
+      in: query
+      required: false
+      description: SoQL `$select` clause specifying which columns to return.
+      schema:
+        type: string
+    SoqlQ:
+      name: $q
+      in: query
+      required: false
+      description: Full-text search query.
+      schema:
+        type: string
+    SoqlWhere:
+      name: $where
+      in: query
+      required: false
+      description: SoQL `$where` filter clause.
+      schema:
+        type: string
+    SoqlOffset:
+      name: $offset
+      in: query
+      required: false
+      description: Row offset for paginating results.
+      schema:
+        type: integer
+        minimum: 0
+    DatasetId:
+      name: dataset_id
+      in: path
+      required: true
+      description: Socrata four-by-four dataset identifier (e.g. `bkv2-68b9`).
+      schema:
+        type: string
+        pattern: ^[a-z0-9]{4}-[a-z0-9]{4}$
+    SoqlLimit:
+      name: $limit
+      in: query
+      required: false
+      description: Maximum number of rows to return (default 1000, max 50000).
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 50000
+  securitySchemes:
+    SocrataAppToken:
+      type: apiKey
+      in: header
+      name: X-App-Token
+      description: 'Optional Socrata application token. Anonymous access is allowed, but
+
+        requests without a token are subject to lower throttling limits.
+
+        '

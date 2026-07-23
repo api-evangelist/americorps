@@ -1,0 +1,118 @@
+openapi: 3.1.0
+info:
+  title: AmeriCorps Open Data Catalog API
+  version: 1.0.0
+  description: 'AmeriCorps publishes research, evaluation, and program data through its open
+
+    data portal at https://data.americorps.gov, which is built on the Socrata
+
+    Open Data (SODA) platform. Datasets are accessible programmatically through
+
+    the standard Socrata views and resource endpoints.
+
+
+    Each dataset is identified by a four-by-four (`xxxx-xxxx`) identifier and can
+
+    be queried via the `/resource/{dataset_id}.{format}` endpoint using SoQL
+
+    (Socrata Query Language) parameters such as `$select`, `$where`, `$order`,
+
+    `$limit`, and `$offset`.
+
+    '
+  contact:
+    name: AmeriCorps Open Data
+    url: https://data.americorps.gov
+servers:
+- url: https://data.americorps.gov
+  description: AmeriCorps Open Data portal (Socrata)
+security:
+- {}
+- SocrataAppToken: []
+tags:
+- name: Catalog
+  description: Discover datasets published on the AmeriCorps open data portal.
+paths:
+  /api/views:
+    get:
+      tags:
+      - Catalog
+      summary: List datasets and assets
+      description: 'Returns a JSON list of all datasets, views, charts, and assets published
+
+        on the AmeriCorps open data portal. Useful for discovery and for
+
+        retrieving dataset identifiers (`id`) needed to call `/resource/{id}`.
+
+        '
+      operationId: listViews
+      parameters:
+      - name: limit
+        in: query
+        description: Maximum number of assets to return.
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 200
+      - name: page
+        in: query
+        description: Page number for paginated catalog responses.
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+      responses:
+        '200':
+          description: Array of dataset/view metadata records.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/View'
+components:
+  schemas:
+    View:
+      type: object
+      description: Socrata view/dataset metadata record.
+      properties:
+        id:
+          type: string
+          description: Socrata four-by-four dataset identifier.
+        name:
+          type: string
+        description:
+          type: string
+        category:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        createdAt:
+          type: integer
+          description: Unix timestamp of creation.
+        rowsUpdatedAt:
+          type: integer
+          description: Unix timestamp of last data update.
+        viewCount:
+          type: integer
+        downloadCount:
+          type: integer
+        columns:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+      additionalProperties: true
+  securitySchemes:
+    SocrataAppToken:
+      type: apiKey
+      in: header
+      name: X-App-Token
+      description: 'Optional Socrata application token. Anonymous access is allowed, but
+
+        requests without a token are subject to lower throttling limits.
+
+        '
