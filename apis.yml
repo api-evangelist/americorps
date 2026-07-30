@@ -20,30 +20,72 @@ tags:
   - Disaster Response
   - Environmental Conservation
 type: Index
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/americorps.png
 access: 3rd-Party
 apis:
-  - aid: americorps:americorps-open-data-soda-api
-    name: AmeriCorps Open Data SODA API
-    tags:
-      - Open Data
-      - Research
-      - Evaluation
-      - National Service
-    humanURL: https://data.americorps.gov
-    baseURL: https://data.americorps.gov/resource
-    properties:
-      - url: https://data.americorps.gov
-        type: Documentation
-      - url: https://data.americorps.gov/api/views
-        type: DataAPI
-    description: >-
-      The AmeriCorps Open Data portal provides programmatic access to AmeriCorps research,
-      evaluation, and program datasets via the Socrata Open Data API (SODA). The portal
-      includes datasets on program outcomes, member experiences, return on investment
-      studies, evidence snapshots for each AmeriCorps program, and evaluation reports.
-      Data is available in JSON, CSV, XML, and RDF formats, with OData endpoints for
-      connecting to tools like Excel and Tableau.
+- aid: americorps:americorps-open-data-soda-api
+  name: AmeriCorps Open Data SODA API
+  tags:
+  - Open Data
+  - Research
+  - Evaluation
+  - National Service
+  humanURL: https://data.americorps.gov
+  baseURL: https://data.americorps.gov/resource
+  properties:
+  - url: https://data.americorps.gov
+    type: Documentation
+  - url: https://data.americorps.gov/api/views
+    type: DataAPI
+  description: >-
+    The AmeriCorps Open Data portal provides programmatic access to AmeriCorps research, evaluation, and
+    program datasets via the Socrata Open Data API (SODA). The portal includes datasets on program outcomes,
+    member experiences, return on investment studies, evidence snapshots for each AmeriCorps program,
+    and evaluation reports. Data is available in JSON, CSV, XML, and RDF formats, with OData endpoints
+    for connecting to tools like Excel and Tableau.
+- aid: americorps:americorps-catalog-api
+  name: AmeriCorps Catalog API
+  description: Discover datasets published on the AmeriCorps open data portal.
+  humanURL: https://data.americorps.gov
+  baseURL: https://data.americorps.gov/resource
+  tags:
+  - Catalog
+  properties:
+  - type: OpenAPI
+    url: openapi/americorps-catalog-api-openapi.yml
+- aid: americorps:americorps-datasets-api
+  name: AmeriCorps Datasets API
+  description: Retrieve dataset rows via the Socrata SODA resource endpoint.
+  humanURL: https://data.americorps.gov
+  baseURL: https://data.americorps.gov/resource
+  tags:
+  - Datasets
+  properties:
+  - type: OpenAPI
+    url: openapi/americorps-datasets-api-openapi.yml
+- aid: americorps:americorps-metadata-api
+  name: AmeriCorps Metadata API
+  description: Retrieve dataset metadata and schema information.
+  humanURL: https://data.americorps.gov
+  baseURL: https://data.americorps.gov/resource
+  tags:
+  - Metadata
+  properties:
+  - type: OpenAPI
+    url: openapi/americorps-metadata-api-openapi.yml
 common:
   - type: AgenticAccess
     url: agentic-access/americorps-agentic-access.yml
