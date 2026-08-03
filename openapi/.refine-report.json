@@ -1,0 +1,18 @@
+{
+  "provider": "americorps",
+  "sources": [
+    "americorps-catalog-api-openapi.yml",
+    "americorps-datasets-api-openapi.yml",
+    "americorps-metadata-api-openapi.yml"
+  ],
+  "outputs": [
+    "americorps-catalog-api-openapi.yml",
+    "americorps-datasets-api-openapi.yml",
+    "americorps-metadata-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
