@@ -1,0 +1,43 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "AmeriCorps Open Data Catalog API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Catalog",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List datasets and assets",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://data.americorps.gov/api/views",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of assets to return."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number for paginated catalog responses."
+              }
+            ]
+          },
+          "docs": "Returns a JSON list of all datasets, views, charts, and assets published\non the AmeriCorps open data portal. Useful for discovery and for\nretrieving dataset identifiers (`id`) needed to call `/resource/{id}`.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

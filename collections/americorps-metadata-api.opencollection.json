@@ -1,0 +1,37 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "AmeriCorps Open Data Catalog Metadata API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Metadata",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get dataset metadata",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://data.americorps.gov/api/views/:dataset_id.json",
+            "params": [
+              {
+                "name": "dataset_id",
+                "value": "",
+                "type": "path",
+                "description": "Socrata four-by-four dataset identifier (e.g. `bkv2-68b9`)."
+              }
+            ]
+          },
+          "docs": "Returns the metadata record for a single dataset, including its columns,\ndescription, tags, and update cadence.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

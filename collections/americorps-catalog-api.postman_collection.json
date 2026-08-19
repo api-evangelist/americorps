@@ -1,0 +1,129 @@
+{
+  "item": [
+    {
+      "id": "e3b23b7e-ffea-4606-8753-74660ad214e7",
+      "name": "Catalog",
+      "description": {
+        "content": "Discover datasets published on the AmeriCorps open data portal.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "87579392-f7ff-45ec-8704-c049782362e5",
+          "name": "List datasets and assets",
+          "request": {
+            "name": "List datasets and assets",
+            "description": {
+              "content": "Returns a JSON list of all datasets, views, charts, and assets published\non the AmeriCorps open data portal. Useful for discovery and for\nretrieving dataset identifiers (`id`) needed to call `/resource/{id}`.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "views"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "Maximum number of assets to return."
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "<integer>",
+                  "description": "Page number for paginated catalog responses."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "2219bd3d-3410-40b6-9bd8-127942194196",
+              "name": "Array of dataset/view metadata records.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "views"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"string\",\n    \"name\": \"string\",\n    \"description\": \"string\",\n    \"category\": \"string\",\n    \"tags\": [\n      \"string\",\n      \"string\"\n    ],\n    \"createdAt\": 8962,\n    \"rowsUpdatedAt\": 5773,\n    \"viewCount\": 1292,\n    \"downloadCount\": 7392,\n    \"columns\": [\n      {\n        \"key_0\": true,\n        \"key_1\": 4579.650222664016,\n        \"key_2\": 4706\n      },\n      {\n        \"key_0\": \"string\",\n        \"key_1\": 2690.644743901769\n      }\n    ]\n  },\n  {\n    \"id\": \"string\",\n    \"name\": \"string\",\n    \"description\": \"string\",\n    \"category\": \"string\",\n    \"tags\": [\n      \"string\",\n      \"string\"\n    ],\n    \"createdAt\": 2839,\n    \"rowsUpdatedAt\": 1519,\n    \"viewCount\": 7317,\n    \"downloadCount\": 4486,\n    \"columns\": [\n      {\n        \"key_0\": 2974,\n        \"key_1\": 2832.707860079767\n      },\n      {\n        \"key_0\": false,\n        \"key_1\": false\n      }\n    ]\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://data.americorps.gov",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "noauth"
+  },
+  "info": {
+    "_postman_id": "b4a104c5-6cbd-446d-bbab-d1320db5a89e",
+    "name": "AmeriCorps Open Data Catalog API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "AmeriCorps publishes research, evaluation, and program data through its open\ndata portal at https://data.americorps.gov, which is built on the Socrata\nOpen Data (SODA) platform. Datasets are accessible programmatically through\nthe standard Socrata views and resource endpoints.\n\nEach dataset is identified by a four-by-four (`xxxx-xxxx`) identifier and can\nbe queried via the `/resource/{dataset_id}.{format}` endpoint using SoQL\n(Socrata Query Language) parameters such as `$select`, `$where`, `$order`,\n`$limit`, and `$offset`.\n\n\nContact Support:\n Name: AmeriCorps Open Data",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,128 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "AmeriCorps Open Data Catalog Datasets API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Datasets",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Query a dataset (JSON)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://data.americorps.gov/resource/:dataset_id.json",
+            "params": [
+              {
+                "name": "dataset_id",
+                "value": "",
+                "type": "path",
+                "description": "Socrata four-by-four dataset identifier (e.g. `bkv2-68b9`)."
+              },
+              {
+                "name": "$select",
+                "value": "",
+                "type": "query",
+                "description": "SoQL `$select` clause specifying which columns to return."
+              },
+              {
+                "name": "$where",
+                "value": "",
+                "type": "query",
+                "description": "SoQL `$where` filter clause."
+              },
+              {
+                "name": "$order",
+                "value": "",
+                "type": "query",
+                "description": "SoQL `$order` clause for sorting results."
+              },
+              {
+                "name": "$group",
+                "value": "",
+                "type": "query",
+                "description": "SoQL `$group` clause for aggregations."
+              },
+              {
+                "name": "$limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of rows to return (default 1000, max 50000)."
+              },
+              {
+                "name": "$offset",
+                "value": "",
+                "type": "query",
+                "description": "Row offset for paginating results."
+              },
+              {
+                "name": "$q",
+                "value": "",
+                "type": "query",
+                "description": "Full-text search query."
+              }
+            ]
+          },
+          "docs": "Returns rows from the specified dataset as JSON. Supports the Socrata\nSODA SoQL query parameters (`$select`, `$where`, `$order`, `$group`,\n`$limit`, `$offset`, `$q`).\n"
+        },
+        {
+          "info": {
+            "name": "Query a dataset (CSV)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://data.americorps.gov/resource/:dataset_id.csv",
+            "params": [
+              {
+                "name": "dataset_id",
+                "value": "",
+                "type": "path",
+                "description": "Socrata four-by-four dataset identifier (e.g. `bkv2-68b9`)."
+              },
+              {
+                "name": "$select",
+                "value": "",
+                "type": "query",
+                "description": "SoQL `$select` clause specifying which columns to return."
+              },
+              {
+                "name": "$where",
+                "value": "",
+                "type": "query",
+                "description": "SoQL `$where` filter clause."
+              },
+              {
+                "name": "$order",
+                "value": "",
+                "type": "query",
+                "description": "SoQL `$order` clause for sorting results."
+              },
+              {
+                "name": "$limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of rows to return (default 1000, max 50000)."
+              },
+              {
+                "name": "$offset",
+                "value": "",
+                "type": "query",
+                "description": "Row offset for paginating results."
+              }
+            ]
+          },
+          "docs": "Returns rows from the specified dataset as CSV."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
