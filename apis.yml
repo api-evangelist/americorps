@@ -11,6 +11,15 @@ description: >-
   portal (data.americorps.gov) providing programmatic access to research, evaluation, and
   program data via the Socrata Open Data API (SODA).
 tags:
+  - Federal-Government
+  - National Service
+  - Volunteerism
+  - Community Development
+  - Civic Engagement
+  - Education
+  - Disaster Response
+  - Environmental Conservation
+tags_raw:
   - Federal Government
   - National Service
   - Volunteerism
