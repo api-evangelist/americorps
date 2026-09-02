@@ -1,0 +1,75 @@
+generated: '2026-09-02'
+method: searched
+source: >-
+  dev.socrata.com (SODA versioning and endpoint reference, the documentation the AmeriCorps
+  portal links to), status.socrata.com probed 2026-09-02, plus live probes of
+  data.americorps.gov and openapi/_original/americorps-openapi.yml.
+versioning:
+  scheme: platform-versioned
+  current: SODA 2.1
+  in_url: false
+  detail: >-
+    AmeriCorps publishes no version of its own. The API is versioned by the Socrata platform:
+    the responses carry X-SODA2-* headers (SODA 2), and the OData surface is explicitly
+    /api/odata/v4/. There is no /v1/ path segment, no version header a caller sets, and no
+    AmeriCorps-published API version number anywhere on the portal.
+  risk: >-
+    Because the contract is not versioned by AmeriCorps, a consumer has no announcement
+    channel for a breaking change to the interface. The stable identifiers are the dataset
+    four-by-fours, not the API version.
+deprecation:
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  rfc8594: false
+  evidence:
+    url: https://data.americorps.gov/resource/fzpw-9z8s.json?$limit=1
+    status: 200
+    detail: >-
+      No Deprecation, Sunset or Link rel="sunset" header on any probed response; no
+      deprecation policy page found on data.americorps.gov or www.americorps.gov.
+  deprecated_operations: []
+  note: >-
+    Zero operations in the OpenAPI are marked deprecated. Dataset-level retirement is the
+    real deprecation event on this API and it is not signaled in-band: a retired four-by-four
+    simply starts returning 404 dataset.missing.
+sla:
+  published: false
+  detail: >-
+    No service level agreement is published by AmeriCorps for the open data portal. As a
+    federal open data surface it carries no availability commitment to consumers.
+status_page:
+  published_by: platform operator
+  url: https://status.socrata.com
+  status: 200
+  covers_this_api: true
+  detail: >-
+    status.socrata.com ("Tyler Data & Insights System Status") reported "All Systems
+    Operational" when probed on 2026-09-02 and enumerates components (Authentication,
+    Catalog, Data Sharing, Data Table, Homepage, Ingress/Publishing, Measures) across three
+    regions including "High Compliance - United States" — the FedRAMP region
+    data.americorps.gov runs in, per its X-Socrata-Region: aws-us-east-1-fedramp-prod
+    response header.
+  caveats:
+    - >-
+      AmeriCorps does not operate or link this page; it belongs to the platform vendor. It
+      reports platform health, not the freshness or correctness of AmeriCorps datasets.
+    - >-
+      No machine-readable summary is exposed — status.socrata.com/api/v2/summary.json returns
+      404, so an agent cannot poll it as a Statuspage-compatible feed.
+data_freshness:
+  in_band: true
+  detail: >-
+    Freshness IS signaled per dataset, which is the lifecycle signal that actually matters
+    here. Every /resource response carries X-SODA2-Truth-Last-Modified, Last-Modified and
+    X-SODA2-Data-Out-Of-Date (observed false, with Last-Modified Tue, 21 Jul 2026 17:49:02
+    GMT on dataset fzpw-9z8s), and /data.json carries `issued` and `modified` dates per
+    dcat:Dataset across all 534 datasets.
+change_communication:
+  api_changelog: false
+  dataset_changelog: true
+  detail: >-
+    There is no API changelog. Dataset creation and update events ARE observable — the
+    per-dataset `createdAt` / `rowsUpdatedAt` fields on /api/views and the `issued` /
+    `modified` fields in /data.json are what this repository's blogs/ entries were built
+    from. That is a data changelog, not an interface changelog.

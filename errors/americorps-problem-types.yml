@@ -1,0 +1,127 @@
+generated: '2026-09-02'
+method: searched
+source: >-
+  dev.socrata.com/docs/response-codes.html (the error reference the AmeriCorps portal's own
+  API documentation link resolves to), enriched with two error bodies captured live from
+  data.americorps.gov on 2026-09-02, and cross-checked against the 4xx responses declared in
+  openapi/_original/americorps-openapi.yml.
+format: proprietary
+media_type: application/json
+note: >-
+  NOT RFC 9457. Errors are returned as application/json with a Socrata-proprietary envelope,
+  and the platform serves TWO different envelope shapes depending on which tier answers —
+  a fact worth knowing before writing a client, because a parser written against one of them
+  silently fails on the other.
+envelopes:
+  - id: platform
+    description: >-
+      The classic Socrata error envelope, returned by the asset/metadata tier — for example a
+      request for a dataset identifier that does not exist.
+    fields:
+      code: Machine-readable error classification, e.g. `dataset.missing`.
+      error: Boolean true, present so a client can detect an error without reading the status.
+      message: Human-readable explanation.
+      data: Object of machine-readable details, e.g. the offending id.
+      status: HTTP status, echoed in the body on some paths.
+      source: Query parsing context (position row/column/text) when the error came from SoQL.
+    observed:
+      url: https://data.americorps.gov/resource/zzzz-zzzz.json
+      status: 404
+      body: '{"code":"dataset.missing","error":true,"message":"Not found","data":{"id":"zzzz-zzzz"}}'
+  - id: query-coordinator
+    description: >-
+      The SoQL query coordinator envelope, returned when a query parses but references
+      something that does not exist. Note the key is `errorCode`, NOT `code`, and there is no
+      `error` boolean — a client keyed on the platform envelope will read `code` as null here.
+    fields:
+      message: Human-readable explanation, prefixed "Query coordinator error:".
+      errorCode: Machine-readable SoQL error identifier, e.g. `query.soql.no-such-column`.
+      data: Object carrying column, dataset and a position map (row, column, line).
+    observed:
+      url: https://data.americorps.gov/resource/fzpw-9z8s.json?$select=nosuchcolumn
+      status: 400
+      body: >-
+        {"message":"Query coordinator error: query.soql.no-such-column; No such column:
+        nosuchcolumn; ...","errorCode":"query.soql.no-such-column","data":{"column":"nosuchcolumn",
+        "dataset":"juliett.212871","position":{"row":1,"column":8,"line":"SELECT `nosuchcolumn`"}}}
+problem_types:
+  - status: 200
+    title: OK
+    description: Request succeeded.
+  - status: 202
+    title: Request Processing
+    description: >-
+      The request is being processed asynchronously. Retry the same request; it returns 200
+      once complete.
+    remediation: >-
+      Retry with backoff. Do not treat 202 as a failure — it is the platform's signal that a
+      large query is still materializing.
+  - status: 400
+    title: Bad Request
+    description: >-
+      Malformed request. On /resource this is almost always an invalid SoQL clause; the
+      envelope's errorCode names the specific fault.
+    known_codes:
+      - code: query.soql.no-such-column
+        meaning: A $select, $where, $order or $group clause named a column the dataset does not have.
+        remediation: >-
+          Read the column list first — GET /api/views/{dataset_id}.json returns the schema, and
+          the X-SODA2-Fields response header on any /resource call lists the field names verbatim.
+      - code: soql.analyzer.typechecker.type-mismatch
+        meaning: A SoQL expression compared or combined incompatible column types.
+        remediation: Check X-SODA2-Types for each field's declared type before building the predicate.
+    operations:
+      - getDatasetJson
+    declared_in_openapi: true
+  - status: 401
+    title: Unauthorized
+    description: Authentication failed.
+    remediation: >-
+      Rarely reachable on this API — the AmeriCorps public datasets need no credential. If it
+      appears, an X-App-Token was sent and rejected; verify the token value.
+  - status: 403
+    title: Forbidden
+    description: >-
+      The caller is authenticated but not authorized for the asset — a private or unpublished
+      dataset.
+    remediation: >-
+      The dataset is not public. There is no self-serve path to it; contact the AmeriCorps
+      Office of Research and Evaluation (Evaluation@americorps.gov, the contactPoint published
+      in data.json).
+  - status: 404
+    title: Not Found
+    description: The dataset identifier or asset does not exist.
+    known_codes:
+      - code: dataset.missing
+        meaning: No dataset with that four-by-four identifier on this domain.
+        remediation: >-
+          Resolve identifiers from GET /api/views or from /data.json rather than hard-coding
+          them; datasets are retired and re-issued.
+    operations:
+      - getViewMetadata
+      - getDatasetJson
+    declared_in_openapi: true
+  - status: 429
+    title: Too Many Requests
+    description: >-
+      The caller has been throttled. Socrata's reference states this is what an untokened
+      caller hits, because anonymous requests share a per-IP pool.
+    remediation: >-
+      Register a free Socrata application token and send it in the X-App-Token header;
+      tokened requests are not throttled short of abuse. Back off exponentially and honor
+      Retry-After if present. See rate-limits/americorps-rate-limits.yml.
+    declared_in_openapi: false
+  - status: 500
+    title: Server Error
+    description: Platform malfunction.
+    remediation: >-
+      Retry with backoff, then check status.socrata.com — the AmeriCorps portal runs in the
+      platform's "High Compliance - United States" region.
+gaps:
+  - >-
+    The OpenAPI declares 400 and 404 but not 202, 429 or 500, and declares none of them with
+    a response schema. An agent parsing this API cannot learn the error envelope from the
+    contract alone.
+  - >-
+    No error response in the contract carries an example. Both real bodies captured above are
+    attached as examples in the overlays under overlays/.

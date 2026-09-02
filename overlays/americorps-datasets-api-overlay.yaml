@@ -1,0 +1,125 @@
+overlay: 1.0.0
+info:
+  title: AmeriCorps Datasets API — API Evangelist enhancements
+  version: 1.0.0
+extends: ../openapi/americorps-datasets-api-openapi.yml
+x-provenance:
+  generated: '2026-09-02'
+  method: generated
+  source: >-
+    API Evangelist enrichment pass. Every example below is a REAL response captured from
+    data.americorps.gov on 2026-09-02; every header and status added is one that was
+    observed on the wire or documented at dev.socrata.com. Nothing here is invented, and the
+    underlying OpenAPI is not mutated.
+actions:
+  - target: $.info
+    update:
+      x-agent-notes: >-
+        Read-only. Anonymous access returns full data. Row schema is per-dataset and is NOT
+        in this contract — discover it at runtime from X-SODA2-Fields / X-SODA2-Types.
+      x-type-fidelity-warning: >-
+        Numeric columns are returned as JSON STRINGS by this endpoint ("all":"0.9035") even
+        though X-SODA2-Types declares them "number". The OData v4 representation of the same
+        dataset (https://data.americorps.gov/api/odata/v4/{dataset_id}) returns real JSON
+        numbers. A client that assumes numbers here will fail.
+  - target: $.paths['/resource/{dataset_id}.json'].get
+    update:
+      x-agentic-access:
+        action-class: connected
+        consequence: read
+        subject: optional
+        token:
+          max-ttl: 3600
+        audit: none
+      x-pagination:
+        style: limit-offset
+        params:
+          - $limit
+          - $offset
+        max_limit: 50000
+        envelope: none
+        warning: >-
+          Always pair $limit/$offset with an explicit $order. Without a stable sort, paging a
+          mutating dataset can repeat or skip rows.
+      x-caching:
+        etag: true
+        last_modified: true
+        detail: >-
+          Weak ETag and Last-Modified are returned. Use If-None-Match / If-Modified-Since —
+          most AmeriCorps datasets change a few times a year, so this is the largest single
+          saving available to a polling client.
+      responses:
+        '200':
+          x-example-source: >-
+            https://data.americorps.gov/resource/fzpw-9z8s.json?$limit=2 (HTTP 200, 2026-09-02)
+          x-example:
+            - code: MOTSKILLS
+              all: '0.9035'
+              asn: '0.9020'
+              nccc: '0.9199'
+              vista: '0.9234'
+            - code: MOTIDEALS
+              all: '0.8731'
+              asn: '0.8723'
+              nccc: '0.7911'
+              vista: '0.9138'
+          x-observed-headers:
+            X-SODA2-Fields: '["code","all","asn","nccc","vista"]'
+            X-SODA2-Types: '["text","number","number","number","number"]'
+            X-SODA2-Data-Out-Of-Date: 'false'
+            X-SODA2-Truth-Last-Modified: Tue, 21 Jul 2026 17:49:02 GMT
+            ETag: weak entity tag
+            Access-Control-Allow-Origin: '*'
+            X-Socrata-Region: aws-us-east-1-fedramp-prod
+        '400':
+          x-example-source: >-
+            https://data.americorps.gov/resource/fzpw-9z8s.json?$select=nosuchcolumn
+            (HTTP 400, 2026-09-02)
+          x-example:
+            message: >-
+              Query coordinator error: query.soql.no-such-column; No such column: nosuchcolumn
+            errorCode: query.soql.no-such-column
+            data:
+              column: nosuchcolumn
+              dataset: juliett.212871
+              position:
+                row: 1
+                column: 8
+                line: SELECT `nosuchcolumn`
+          x-note: >-
+            Note the key is errorCode, not code, and there is no `error` boolean on this shape.
+        '404':
+          x-example-source: 'https://data.americorps.gov/resource/zzzz-zzzz.json (HTTP 404, 2026-09-02)'
+          x-example:
+            code: dataset.missing
+            error: true
+            message: Not found
+            data:
+              id: zzzz-zzzz
+        '429':
+          description: >-
+            Too Many Requests. Documented at dev.socrata.com/docs/response-codes.html.
+            Not declared in the source contract.
+  - target: $.paths['/resource/{dataset_id}.csv'].get
+    update:
+      x-agentic-access:
+        action-class: connected
+        consequence: read
+        subject: optional
+        token:
+          max-ttl: 3600
+        audit: none
+      x-use-when: Bulk export. Preferred over the JSON representation for whole-dataset pulls.
+      responses:
+        '200':
+          x-example-source: >-
+            https://data.americorps.gov/resource/fzpw-9z8s.csv?$limit=2 (HTTP 200, 2026-09-02)
+          x-example: |
+            "code","all","asn","nccc","vista"
+            "MOTSKILLS","0.9035","0.9020","0.9199","0.9234"
+            "MOTIDEALS","0.8731","0.8723","0.7911","0.9138"
+  - target: $.components.parameters.SoqlOrder
+    update:
+      x-importance: >-
+        Effectively required whenever $offset is used. Socrata does not guarantee a stable
+        row order without it.

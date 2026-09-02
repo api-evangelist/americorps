@@ -1,0 +1,164 @@
+generated: '2026-09-02'
+method: derived
+source: >-
+  Derived from openapi/_original/americorps-openapi.yml ($ref links and path parameters) and
+  from the real shapes returned by data.americorps.gov on 2026-09-02 (/api/views,
+  /api/views/{4x4}.json, /resource/{4x4}.json, /data.json).
+note: >-
+  This API has an unusual data model for a REST surface: exactly ONE first-class entity is
+  described by the contract (the Socrata View), and the actual payload — dataset rows — is
+  schemaless in the OpenAPI (`type: object, additionalProperties: true`). The row schema is
+  not fixed by the API at all; it is per-dataset and is discovered at runtime from the
+  X-SODA2-Fields / X-SODA2-Types response headers or from the View's own column list. Any
+  consumer of this API is really consuming 534 different row schemas behind one endpoint.
+identifiers:
+  - name: dataset_id
+    also_known_as: four-by-four, 4x4
+    pattern: '^[a-z0-9]{4}-[a-z0-9]{4}$'
+    example: fzpw-9z8s
+    stability: >-
+      Stable while a dataset lives; reissued when a dataset is republished. Resolve from
+      /api/views or /data.json rather than hard-coding.
+  - name: __id
+    scope: OData v4 representation only
+    example: row-mkpg_v26k_z5g3
+    detail: >-
+      Row-level identity, returned by /api/odata/v4/{4x4} but NOT by /resource/{4x4}.json.
+      There is no row identifier in the SODA representation.
+entities:
+  - name: View
+    description: >-
+      A dataset, chart, filtered view or other asset published on the portal. The only entity
+      the OpenAPI schematizes.
+    schema_ref: '#/components/schemas/View'
+    endpoints:
+      - listViews
+      - getViewMetadata
+    key: id
+    fields_declared_in_openapi:
+      - {name: id, type: string, detail: four-by-four identifier}
+      - {name: name, type: string}
+      - {name: description, type: string}
+      - {name: category, type: string}
+      - {name: tags, type: array<string>}
+      - {name: createdAt, type: integer, detail: unix timestamp}
+      - {name: rowsUpdatedAt, type: integer, detail: unix timestamp}
+      - {name: viewCount, type: integer}
+      - {name: downloadCount, type: integer}
+      - {name: columns, type: array<object>}
+    fields_observed_but_undeclared:
+      note: >-
+        The live /api/views response returns substantially more than the contract declares.
+        Observed on 2026-09-02 and absent from the OpenAPI schema — the spec is honest about
+        this via additionalProperties: true, but an agent reading only the contract will not
+        know these exist.
+      fields:
+        - assetType
+        - displayType
+        - viewType
+        - publicationStage
+        - publicationDate
+        - publicationGroup
+        - publicationAppendEnabled
+        - provenance
+        - owner
+        - rights
+        - grants
+        - approvals
+        - flags
+        - locked
+        - metadata
+        - clientContext
+        - domainCName
+        - tableId
+        - tableAuthor
+        - rowsUpdatedBy
+        - viewLastModified
+        - averageRating
+        - totalTimesRated
+        - numberOfComments
+        - hideFromCatalog
+        - hideFromDataJson
+        - newBackend
+        - diciBackend
+        - oid
+  - name: DatasetRow
+    description: >-
+      One record inside a dataset. Schemaless in the contract; the shape is determined by the
+      dataset's own columns.
+    schema_ref: 'inline: object with additionalProperties'
+    endpoints:
+      - getDatasetJson
+      - getDatasetCsv
+    key: none in the SODA representation (__id in the OData representation)
+    runtime_schema_discovery:
+      - header: X-SODA2-Fields
+        example: '["code","all","asn","nccc","vista"]'
+      - header: X-SODA2-Types
+        example: '["text","number","number","number","number"]'
+      - endpoint: getViewMetadata
+        detail: View.columns carries the declared column list for the dataset.
+    type_fidelity_warning: >-
+      Numeric columns come back as JSON STRINGS from /resource ("all":"0.9035") and as JSON
+      NUMBERS from the OData v4 representation (0.9035), despite X-SODA2-Types declaring them
+      "number" in both cases.
+  - name: Column
+    description: A column definition inside a View.
+    schema_ref: 'inline: object with additionalProperties inside View.columns'
+    endpoints:
+      - getViewMetadata
+    note: Not schematized — declared as an untyped object array in the contract.
+  - name: CatalogEntry
+    description: >-
+      A dcat:Dataset record in the DCAT-US catalog. Not in the OpenAPI, but served at
+      /data.json and the richest published description of each dataset.
+    endpoints: []
+    served_at: https://data.americorps.gov/data.json
+    fields:
+      - {name: identifier, detail: 'https://data.americorps.gov/api/views/{4x4} — joins to View.id'}
+      - {name: landingPage, detail: 'https://data.americorps.gov/d/{4x4}'}
+      - {name: title}
+      - {name: description}
+      - {name: keyword, type: array<string>}
+      - {name: issued, type: date}
+      - {name: modified, type: date}
+      - {name: accessLevel, detail: 'public on every AmeriCorps dataset'}
+      - {name: bureauCode, example: '485:00'}
+      - {name: programCode, example: '485:000'}
+      - {name: 'contactPoint', detail: 'vcard:Contact — fn + hasEmail, e.g. mailto:Evaluation@americorps.gov'}
+      - {name: publisher, detail: 'org:Organization'}
+      - {name: distribution, type: array<object>}
+relationships:
+  - from: View
+    to: DatasetRow
+    type: has_many
+    via: View.id -> path parameter dataset_id on /resource/{dataset_id}.{format}
+    detail: >-
+      The join every consumer makes. It is a path-parameter binding, not a $ref — the OpenAPI
+      cannot express it, so an agent must be told that listViews.id feeds getDatasetJson.dataset_id.
+  - from: View
+    to: Column
+    type: has_many
+    via: View.columns
+  - from: CatalogEntry
+    to: View
+    type: has_one
+    via: CatalogEntry.identifier contains the same four-by-four as View.id
+  - from: View
+    to: View
+    type: belongs_to
+    via: publicationGroup
+    confidence: low
+    detail: >-
+      Observed field; Socrata uses publicationGroup to relate successive published revisions
+      of the same asset. Not declared in the contract and not verified across revisions here.
+traversal:
+  canonical_path:
+    - GET /api/views  (or GET /data.json for the richer DCAT description)
+    - pick a dataset id
+    - GET /api/views/{dataset_id}.json  to read columns and types
+    - GET /resource/{dataset_id}.json?$select=...&$where=...&$limit=...&$offset=...
+  note: >-
+    There is no cross-dataset join. Every dataset is an island; relationships between
+    AmeriCorps datasets (e.g. a state code appearing in several) are conventions in the data,
+    not modeled by the API.

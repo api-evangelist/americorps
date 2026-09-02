@@ -1,0 +1,32 @@
+generated: '2026-09-02'
+method: generated
+provider: AmeriCorps
+providerId: americorps
+source: >-
+  Packaged Agent Skills written from the operationIds actually declared in this repository's
+  OpenAPI files, plus behaviour observed live on data.americorps.gov on 2026-09-02. No
+  provider-published skills or AGENTS.md exist — probed data.americorps.gov and
+  www.americorps.gov, and github.com/AmeriCorps (one empty `.github` repository).
+note: >-
+  Two skills, because this API has exactly two flows: resolve a dataset identifier, then
+  query it. There is no write surface, so there is no transactional flow to package.
+skills:
+  - name: americorps-find-a-dataset
+    file: americorps-find-a-dataset.md
+    description: >-
+      Find the right AmeriCorps dataset and resolve its four-by-four identifier, which every
+      other call needs.
+    api: AmeriCorps Catalog API
+    operations:
+      - listViews
+      - getViewMetadata
+  - name: americorps-query-a-dataset
+    file: americorps-query-a-dataset.md
+    description: >-
+      Query rows with SoQL — project, filter, aggregate, page and bulk-export as CSV —
+      handling the string-typed-number trap and the two error envelopes.
+    api: AmeriCorps Datasets API
+    operations:
+      - getDatasetJson
+      - getDatasetCsv
+      - getViewMetadata

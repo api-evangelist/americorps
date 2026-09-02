@@ -7,7 +7,7 @@ artifacts:
     method: generated
     evidence: declared in the artifact
   authentication/americorps-authentication.yml:
-    method: derived
+    method: searched
     evidence: declared in the artifact
   collections/americorps-catalog-api.opencollection.json:
     method: derived
@@ -33,61 +33,22 @@ artifacts:
   collections/americorps.postman_collection.json:
     method: derived
     evidence: openapi/americorps
+  conformance/americorps-conformance.yml:
+    method: unknown
+    evidence: no authorship recorded
+  conventions/americorps-conventions.yml:
+    method: searched
+    evidence: declared in the artifact
+  data-model/americorps-data-model.yml:
+    method: derived
+    evidence: declared in the artifact
+  errors/americorps-problem-types.yml:
+    method: searched
+    evidence: declared in the artifact
   finops/americorps-finops.yml:
     method: generated
     evidence: declared in the artifact
-  kin/checks-2026-08-28T221322.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-07-23T094130.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-07-23T182523.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-07-26T223651.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-07-27T083119.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-07-27T190208.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-07-28T115055.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-07-28T170848.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-07-28T172558.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-07-28T192327.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-07-28T200725.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-07-31T133250.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-07-31T151044.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-07-31T162206.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-07-31T202106.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-01T163141.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-01T163302.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-01T171935.yml:
+  kin/checks-2026-09-01T222808.yml:
     method: generated
     evidence: Kin Score snapshot written by score.rb
   kin/score-2026-08-03T113057.yml:
@@ -183,6 +144,39 @@ artifacts:
   kin/score-2026-08-28T221322.yml:
     method: generated
     evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-08-29T213958.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-08-29T230545.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-08-30T203505.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-08-30T220315.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-08-31T223420.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-09-01T063623.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-09-01T210448.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-09-01T222808.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  lifecycle/americorps-lifecycle.yml:
+    method: searched
+    evidence: declared in the artifact
+  llms/americorps-llms.txt:
+    method: generated
+    evidence: declared in the artifact
+  mcp/americorps-mcp.yml:
+    method: derived
+    evidence: declared in the artifact
   openapi/americorps-catalog-api-openapi.yml:
     method: unknown
     evidence: no authorship recorded
@@ -192,12 +186,39 @@ artifacts:
   openapi/americorps-metadata-api-openapi.yml:
     method: unknown
     evidence: no authorship recorded
-  plans/americorps-plans-pricing.yml:
+  overlays/americorps-catalog-api-overlay.yaml:
     method: generated
+    evidence: declared in the artifact
+  overlays/americorps-datasets-api-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  overlays/americorps-metadata-api-overlay.yaml:
+    method: generated
+    evidence: declared in the artifact
+  packages/americorps-packages.yml:
+    method: searched
+    evidence: declared in the artifact
+  plans/americorps-plans-pricing.yml:
+    method: searched
     evidence: declared in the artifact
   rate-limits/americorps-rate-limits.yml:
-    method: generated
+    method: searched
     evidence: declared in the artifact
   security/americorps-domain-security.yml:
+    method: unknown
+    evidence: no authorship recorded
+  security/americorps-vulnerability-disclosure.yml:
+    method: searched
+    evidence: declared in the artifact
+  skills/_index.yml:
+    method: generated
+    evidence: declared in the artifact
+  skills/americorps-find-a-dataset.md:
+    method: generated
+    evidence: declared in the artifact
+  skills/americorps-query-a-dataset.md:
+    method: generated
+    evidence: declared in the artifact
+  well-known/americorps-well-known.yml:
     method: unknown
     evidence: no authorship recorded

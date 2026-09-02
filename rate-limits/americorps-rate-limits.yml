@@ -3,93 +3,89 @@ specificationVersion: '0.1'
 schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
 provider: AmeriCorps
 providerId: americorps
+generated: '2026-09-02'
+method: searched
+source: >-
+  dev.socrata.com/docs/app-tokens.html and dev.socrata.com/docs/response-codes.html (the
+  throttling reference the AmeriCorps portal's API documentation link resolves to), plus
+  response headers observed live on data.americorps.gov 2026-09-02.
 created: '2026-05-04'
-# Provenance stamped 2026-08-11: this artifact was written by the API Evangelist
-# bulk sweep dated 2026-05-04, not harvested from the provider. See roadmap#35.
-method: generated
-modified: '2026-05-04'
-tags:
-  - Federal Government
-  - National Service
-  - Volunteerism
-  - Community Development
-  - Civic Engagement
-  - Education
-  - Disaster Response
-  - Environmental Conservation
-  - Rate Limiting
-  - Quotas
-  - Throttling
-description: Machine-readable rate limit definitions for the AmeriCorps API surface. Captures per-tier
-  quotas, burst behavior, response signaling, and recovery semantics. Defaults are scaffold values to
-  be replaced with published provider limits.
-headers:
-  limit: X-RateLimit-Limit
-  remaining: X-RateLimit-Remaining
-  reset: X-RateLimit-Reset
-  retryAfter: Retry-After
-  policy: RateLimit-Policy
-responseCodes:
-  throttled: 429
-  quotaExceeded: 429
-  serviceUnavailable: 503
-limits:
-  - tier: free
-    name: Free Tier Default
-    scope: api-key
-    metric: requests_per_minute
-    limit: 10
-    burst: 20
-    timeFrame: minute
-    applies:
-      - AmeriCorps Open Data SODA API
-  - tier: free
-    name: Free Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 1000
-    timeFrame: month
-    applies:
-      - AmeriCorps Open Data SODA API
-  - tier: professional
-    name: Professional Tier Default
-    scope: api-key
-    metric: requests_per_minute
-    limit: 100
-    burst: 200
-    timeFrame: minute
-    applies:
-      - AmeriCorps Open Data SODA API
-  - tier: professional
-    name: Professional Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 100000
-    timeFrame: month
-    applies:
-      - AmeriCorps Open Data SODA API
-  - tier: enterprise
-    name: Enterprise Negotiated Limit
-    scope: contract
-    metric: requests_per_minute
-    limit: 1000
-    burst: 5000
-    timeFrame: minute
-    applies:
-      - AmeriCorps Open Data SODA API
+modified: '2026-09-02'
+limit_count: 0
+supersedes: >-
+  This file previously carried five invented numeric limits (10/100/1000 requests per minute
+  across Free/Professional/Enterprise tiers, with 1,000 and 100,000 monthly quotas) and a
+  full X-RateLimit-* header set, written by the 2026-05-04 bulk sweep. AmeriCorps publishes
+  none of those numbers and returns none of those headers. Replaced with the searched and
+  probed finding below; do not restore it.
+limits: []
+finding:
+  numeric_limits_published: false
+  detail: >-
+    No numeric rate limit is published for the AmeriCorps API, by AmeriCorps or by the
+    Socrata platform beneath it. The platform documentation states the policy without a
+    number in either direction: requests WITHOUT an application token "come from a shared
+    pool via IP address" and IP addresses "that make too many requests during a given period
+    may be subject to throttling"; requests WITH an application token are "not throttled
+    unless those requests are determined to be abusive or malicious". No window, ceiling or
+    burst allowance is given for either case.
+  exhaustion_status: 429
+  exhaustion_detail: >-
+    The platform error reference documents 429 Too Many Requests with the remediation "use an
+    app token". This is the documented signal a client must handle.
+  headers_observed: []
+  headers_detail: >-
+    PROBED, not assumed. Neither /api/views nor /resource returned any X-RateLimit-*,
+    RateLimit-* or Retry-After header on a successful unauthenticated response. The full
+    response header set observed was: Server, Date, Content-Type, Transfer-Encoding,
+    Connection, Access-Control-Allow-Origin, Vary, X-Socrata-Region, X-Socrata-RequestId,
+    Strict-Transport-Security, and on /resource additionally ETag, Last-Modified and the
+    X-SODA2-* family. An agent therefore has NO runtime budget signal on this API — it cannot
+    know how much headroom it has until it is already throttled.
+  crawl_guidance:
+    source: https://data.americorps.gov/robots.txt
+    status: 200
+    directive: 'Crawl-delay: 1'
+    detail: >-
+      The only quantified pacing figure AmeriCorps actually publishes anywhere is a
+      Crawl-delay of 1 second in robots.txt. It governs crawlers rather than API clients, but
+      it is the sole first-party number on record and a reasonable floor for a polite polling
+      cadence.
+  reduce_load_instead:
+    - >-
+      Send conditional requests — /resource returns ETag and Last-Modified, and most
+      AmeriCorps datasets change a few times a year.
+    - >-
+      Register the free Socrata application token; per the platform documentation it removes
+      you from the shared anonymous IP pool entirely.
+    - >-
+      Use $select and $where to fetch only the needed columns and rows rather than paging a
+      whole dataset, and use .csv for bulk pulls.
+  evidence:
+    - url: https://data.americorps.gov/api/views?limit=1
+      status: 200
+      detail: No rate-limit header of any kind in the response.
+    - url: https://data.americorps.gov/resource/fzpw-9z8s.json?$limit=1
+      status: 200
+      detail: No rate-limit header of any kind in the response.
+    - url: https://dev.socrata.com/docs/app-tokens.html
+      status: 200
+      detail: Throttling policy stated in prose with no numbers.
+    - url: https://dev.socrata.com/docs/response-codes.html
+      status: 200
+      detail: Documents 429 Too Many Requests, remediation "use an app token".
+    - url: https://data.americorps.gov/robots.txt
+      status: 200
+      detail: 'Crawl-delay: 1'
 policies:
   - name: Backoff Strategy
-    description: Clients should implement exponential backoff with jitter, honoring the Retry-After header
-      when present.
-  - name: Burst Handling
-    description: Short bursts above the steady-state limit are tolerated up to the documented burst ceiling
-      before throttling engages.
-  - name: Quota Reset
-    description: Monthly quotas reset at the start of each calendar month in UTC. Per-minute and per-second
-      windows reset on a sliding-window basis.
-  - name: Fair Use
-    description: Even on uncapped enterprise tiers, sustained usage that materially impacts shared infrastructure
-      may be subject to fair-use throttling.
+    description: >-
+      On 429, back off exponentially with jitter. Honor Retry-After if it appears, but do not
+      depend on it — it was not observed on any probed response.
+  - name: Token Registration
+    description: >-
+      The documented remedy for throttling is a free Socrata application token in the
+      X-App-Token header, which moves the caller off the shared anonymous per-IP pool.
 maintainers:
   - FN: Kin Lane
     email: info@apievangelist.com

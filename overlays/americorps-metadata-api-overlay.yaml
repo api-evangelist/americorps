@@ -1,0 +1,64 @@
+overlay: 1.0.0
+info:
+  title: AmeriCorps Metadata API — API Evangelist enhancements
+  version: 1.0.0
+extends: ../openapi/americorps-metadata-api-openapi.yml
+x-provenance:
+  generated: '2026-09-02'
+  method: generated
+  source: >-
+    API Evangelist enrichment pass. Every example below is a REAL response captured from
+    data.americorps.gov on 2026-09-02; every header and status added is one that was
+    observed on the wire or documented at dev.socrata.com. Nothing here is invented, and the
+    underlying OpenAPI is not mutated.
+actions:
+  - target: $.info
+    update:
+      x-agent-notes: >-
+        Read-only. Call this to learn a dataset's columns before querying /resource — or skip
+        it entirely and read X-SODA2-Fields / X-SODA2-Types from a $limit=1 /resource call.
+      x-richer-alternative: >-
+        https://data.americorps.gov/data.json returns a DCAT-US 1.1 catalog with a fuller
+        description of every dataset — issued/modified dates, keywords, bureauCode,
+        programCode, accessLevel and a vcard contactPoint — none of which this endpoint
+        returns.
+  - target: $.paths['/api/views/{dataset_id}.json'].get
+    update:
+      x-agentic-access:
+        action-class: connected
+        consequence: read
+        subject: optional
+        token:
+          max-ttl: 3600
+        audit: none
+      responses:
+        '200':
+          x-example-source: >-
+            https://data.americorps.gov/api/views/fzpw-9z8s.json (HTTP 200, 2026-09-02)
+          x-example:
+            id: fzpw-9z8s
+            name: '2025 AmeriCorps MES: AmeriCorps Member Exit Survey'
+            assetType: dataset
+            attribution: AmeriCorps Office of Research and Evaluation
+            category: National Service
+            createdAt: 1784583759
+            rowsUpdatedAt: 1784656131
+            viewCount: 580
+            downloadCount: 23
+        '404':
+          x-example-source: 'https://data.americorps.gov/resource/zzzz-zzzz.json (HTTP 404, 2026-09-02)'
+          x-example:
+            code: dataset.missing
+            error: true
+            message: Not found
+            data:
+              id: zzzz-zzzz
+          x-note: >-
+            The same dataset.missing envelope is returned by the asset tier for an unknown
+            four-by-four.
+  - target: $.components.parameters.DatasetId
+    update:
+      x-resolve-from: >-
+        GET /api/views, or https://data.americorps.gov/data.json. Do not hard-code — a
+        four-by-four is reissued when a dataset is republished, and a retired one starts
+        returning 404 dataset.missing with no in-band deprecation signal.

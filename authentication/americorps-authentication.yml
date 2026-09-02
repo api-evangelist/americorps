@@ -1,18 +1,68 @@
-generated: '2026-07-11'
-method: derived
-source: openapi/americorps-openapi.yml
+generated: '2026-09-02'
+method: searched
+source: >-
+  https://dev.socrata.com/docs/app-tokens.html — the application-token reference the
+  AmeriCorps portal's API documentation link resolves to — reconciled with the
+  securitySchemes declared in openapi/_original/americorps-openapi.yml and verified by live
+  anonymous calls to data.americorps.gov on 2026-09-02.
+docs: https://dev.socrata.com/docs/app-tokens.html
 summary:
   types:
-  - apiKey
+    - apiKey
   api_key_in:
-  - header
+    - header
+  anonymous_allowed: true
+  oauth2: false
+  openid_connect: false
+  mutual_tls: false
+  posture: >-
+    Optional-credential public API. Anonymous access is the DEFAULT and returns full data;
+    the credential is a throttling identity, not an authorization grant. Verified live:
+    GET https://data.americorps.gov/resource/fzpw-9z8s.json?$limit=1 returned 200 with data
+    and no credential presented.
 schemes:
-- name: SocrataAppToken
-  type: apiKey
-  in: header
-  parameter: X-App-Token
-  description: |-
-    Optional Socrata application token. Anonymous access is allowed, but
-    requests without a token are subject to lower throttling limits.
-  sources:
-  - openapi/americorps-openapi.yml
+  - name: SocrataAppToken
+    type: apiKey
+    in: header
+    parameter: X-App-Token
+    required: false
+    description: >-
+      Optional Socrata application token. Anonymous access is allowed, but requests without a
+      token draw from a shared per-IP pool and may be throttled.
+    what_it_grants: >-
+      Nothing additional. Per the platform documentation a token does not confer access to
+      any dataset an anonymous caller cannot already read — the AmeriCorps datasets are all
+      accessLevel "public". Its only effect is that tokened requests are not throttled unless
+      judged abusive.
+    obtain: >-
+      Register a free Socrata developer account and create an application token. No AmeriCorps
+      approval, contract or agency relationship is involved, and there is no cost.
+    legacy_alternatives:
+      - parameter: $$app_token
+        in: query
+        note: SODA 2.0 / 2.1 legacy form.
+      - parameter: app_token
+        in: query
+        note: SODA 1.0 legacy form.
+    sources:
+      - openapi/_original/americorps-openapi.yml
+      - https://dev.socrata.com/docs/app-tokens.html
+discovery:
+  well_known_openid_configuration:
+    url: https://data.americorps.gov/.well-known/openid-configuration
+    status: 404
+  well_known_oauth_authorization_server:
+    url: https://data.americorps.gov/.well-known/oauth-authorization-server
+    status: 404
+  well_known_oauth_protected_resource:
+    url: https://data.americorps.gov/.well-known/oauth-protected-resource
+    status: 404
+  detail: >-
+    No authentication discovery document is served on either AmeriCorps host. An agent cannot
+    learn the auth model from the wire; it must read the docs or the OpenAPI.
+non_public_surface:
+  note: >-
+    Private/unpublished Socrata assets return 403 rather than 404, but AmeriCorps exposes no
+    self-serve path to request access to one. The published contactPoint for the catalog is
+    Evaluation@americorps.gov (AmeriCorps Office of Research and Evaluation, from
+    https://data.americorps.gov/data.json).

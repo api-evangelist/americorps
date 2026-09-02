@@ -1,0 +1,85 @@
+overlay: 1.0.0
+info:
+  title: AmeriCorps Catalog API — API Evangelist enhancements
+  version: 1.0.0
+extends: ../openapi/americorps-catalog-api-openapi.yml
+x-provenance:
+  generated: '2026-09-02'
+  method: generated
+  source: >-
+    API Evangelist enrichment pass. Every example below is a REAL response captured from
+    data.americorps.gov on 2026-09-02; every header and status added is one that was
+    observed on the wire or documented at dev.socrata.com. Nothing here is invented, and the
+    underlying OpenAPI is not mutated.
+actions:
+  - target: $.info
+    update:
+      x-agent-notes: >-
+        Read-only API. No credential required; an optional Socrata application token in the
+        X-App-Token header only raises throttling headroom. Responses are bare JSON arrays
+        with no envelope, total count or cursor.
+      x-rate-limit-signal: >-
+        No X-RateLimit-*, RateLimit-* or Retry-After header is returned on any response. The
+        documented exhaustion status is 429; the documented remedy is a free app token.
+      x-error-envelope: >-
+        Proprietary JSON, not RFC 9457. Two shapes — {code,error,message,data} from the asset
+        tier and {message,errorCode,data} from the SoQL query coordinator.
+  - target: $.paths['/api/views'].get
+    update:
+      x-agentic-access:
+        action-class: connected
+        consequence: read
+        subject: optional
+        token:
+          max-ttl: 3600
+        audit: none
+      x-pagination:
+        style: page-number
+        params:
+          - limit
+          - page
+        max_limit: 200
+        envelope: none
+        detail: >-
+          Returns a bare array. Page until a short page comes back; there is no total count.
+      responses:
+        '200':
+          x-example-source: 'https://data.americorps.gov/api/views?limit=1 (HTTP 200, 2026-09-02)'
+          x-example:
+            - id: fzpw-9z8s
+              name: '2025 AmeriCorps MES: AmeriCorps Member Exit Survey'
+              assetType: dataset
+              category: National Service
+              createdAt: 1784583759
+              rowsUpdatedAt: 1784656131
+              viewCount: 580
+              downloadCount: 23
+          x-undeclared-fields: >-
+            The live response also returns assetType, displayType, viewType, publicationStage,
+            publicationDate, publicationGroup, provenance, owner, rights, grants, approvals,
+            flags, locked, metadata, clientContext, domainCName, tableId, tableAuthor,
+            rowsUpdatedBy, viewLastModified, averageRating, totalTimesRated, numberOfComments,
+            hideFromCatalog, hideFromDataJson, newBackend, diciBackend and oid. The schema
+            permits them via additionalProperties but does not name them.
+          x-observed-headers:
+            Access-Control-Allow-Origin: '*'
+            X-Socrata-Region: aws-us-east-1-fedramp-prod
+            X-Socrata-RequestId: opaque request identifier, quote it when reporting a problem
+            Strict-Transport-Security: max-age=31536000; includeSubDomains
+        '429':
+          description: >-
+            Too Many Requests. Documented at dev.socrata.com/docs/response-codes.html;
+            untokened callers share a per-IP pool. Not declared in the source contract.
+        '500':
+          description: >-
+            Server Error. Documented at dev.socrata.com/docs/response-codes.html. Not declared
+            in the source contract.
+  - target: $.components.schemas.View
+    update:
+      x-key: id
+      x-identifier-pattern: '^[a-z0-9]{4}-[a-z0-9]{4}$'
+      x-relationship: >-
+        View.id feeds the dataset_id path parameter of getDatasetJson, getDatasetCsv and
+        getViewMetadata. This is the only join in the API and the OpenAPI cannot express it.
+      x-timestamp-format: >-
+        createdAt and rowsUpdatedAt are UNIX epoch SECONDS as integers, not ISO-8601 strings.

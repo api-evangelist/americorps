@@ -1,0 +1,90 @@
+generated: '2026-09-02'
+method: searched
+source: >-
+  Registry metadata queried 2026-09-02 from pypi.org/pypi/<pkg>/json,
+  registry.npmjs.org/<pkg> and rubygems.org/api/v1/gems/<pkg>.json, plus the Socrata
+  developer site (dev.socrata.com/libraries) that data.americorps.gov's own API
+  documentation link points at.
+summary:
+  official_count: 0
+  package_count: 4
+  note: >-
+    AmeriCorps publishes NO first-party client library in any registry. Its GitHub
+    organization (github.com/AmeriCorps) contains a single repository — `.github`, last
+    pushed 2024-05-01 — and no code. The packages below are clients for the Socrata SODA
+    platform that hosts data.americorps.gov; they are first-party to Socrata / Tyler Data &
+    Insights (or, for sodapy, to an independent maintainer), NOT to AmeriCorps, so every
+    entry is official:false and no `SDKs` pointer is wired into apis.yml.
+    Currency matters here: three of the four have not shipped a release in four to nine
+    years, which is the abandonment signal an integrator should weigh before adopting one.
+packages:
+  - name: sodapy
+    language: Python
+    registry: pypi
+    url: https://pypi.org/project/sodapy/
+    repository: https://github.com/xmunoz/sodapy
+    official: false
+    first_party_to: independent maintainer (xmunoz)
+    version: 2.2.0
+    published: '2022-08-31'
+    covers:
+      - AmeriCorps Datasets API
+      - AmeriCorps Metadata API
+      - AmeriCorps Catalog API
+    note: >-
+      The most widely used Python client for the SODA read API. Wraps /resource/{4x4} and
+      SoQL parameters and accepts an X-App-Token. Not published by Socrata and not by
+      AmeriCorps; last release 2022-08-31.
+  - name: socrata-py
+    language: Python
+    registry: pypi
+    url: https://pypi.org/project/socrata-py/
+    repository: https://github.com/socrata/socrata-py
+    official: false
+    first_party_to: Socrata / Tyler Data & Insights (platform vendor)
+    version: 1.2.0
+    published: '2026-06-18'
+    covers: []
+    note: >-
+      Socrata's own Python SDK, but for the PUBLISHING API (creating and revising datasets),
+      not the public read API AmeriCorps exposes. Listed for completeness; an AmeriCorps data
+      consumer has no use for it without publisher credentials. The only entry here still
+      under active release.
+  - name: soda-ruby
+    language: Ruby
+    registry: rubygems
+    url: https://rubygems.org/gems/soda-ruby
+    repository: https://github.com/socrata/soda-ruby
+    official: false
+    first_party_to: Socrata / Tyler Data & Insights (platform vendor)
+    version: 1.0.1
+    published: '2020-06-24'
+    covers:
+      - AmeriCorps Datasets API
+      - AmeriCorps Metadata API
+    note: Socrata's Ruby SODA client. Last release 2020-06-24.
+  - name: soda-js
+    language: JavaScript
+    registry: npm
+    url: https://www.npmjs.com/package/soda-js
+    repository: https://github.com/socrata/soda-js
+    official: false
+    first_party_to: Socrata / Tyler Data & Insights (platform vendor)
+    version: 0.2.3
+    published: '2017-01-25'
+    covers:
+      - AmeriCorps Datasets API
+    note: >-
+      Socrata's JavaScript SODA client. Last release 2017-01-25 — nine years stale and still
+      pre-1.0. Treat as unmaintained.
+not_found:
+  - registry: maven-central
+    note: No Socrata or AmeriCorps SODA client found for the AmeriCorps surface.
+  - registry: nuget
+    note: No first-party package.
+  - registry: pkg.go.dev
+    note: No first-party package.
+  - registry: crates.io
+    note: No first-party package.
+  - registry: packagist
+    note: No first-party package.

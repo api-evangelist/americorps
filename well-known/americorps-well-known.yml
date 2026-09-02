@@ -1,0 +1,101 @@
+generated: '2026-09-02'
+method: probed
+source: >-
+  Direct HTTP probes of every /.well-known/ path in the enrichment contract against both
+  AmeriCorps hosts (the agency website and the Socrata-hosted open data portal), 2026-09-02.
+note: >-
+  Every probed path returned 404. Recorded as an absence, not a presence: no WellKnown or
+  SecurityTxt pointer is wired into apis.yml, because AmeriCorps serves none of these
+  documents. Both hosts answer 404 with an HTML body — data.americorps.gov returns the
+  Socrata single-page-application shell (~515 KB of HTML) under a 404 status, and
+  www.americorps.gov returns the Drupal 404 page. Neither is a document.
+  AmeriCorps DOES publish a Vulnerability Disclosure Policy, but as an HTML page at
+  /about/agency-overview/vulnerability-disclosure-policy rather than as an RFC 9116
+  security.txt — see security/americorps-vulnerability-disclosure.yml.
+hosts:
+  - host: data.americorps.gov
+    note: AmeriCorps Open Data portal, operated on the Socrata (Tyler Data & Insights) FedRAMP platform.
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+        file: null
+      - path: /.well-known/openid-configuration
+        status: 404
+        file: null
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+        file: null
+      - path: /.well-known/oauth-protected-resource
+        status: 404
+        file: null
+      - path: /.well-known/api-catalog
+        status: 404
+        file: null
+      - path: /.well-known/ai-plugin.json
+        status: 404
+        file: null
+      - path: /.well-known/agent-card.json
+        status: 404
+        file: null
+      - path: /.well-known/agent.json
+        status: 404
+        file: null
+  - host: www.americorps.gov
+    note: AmeriCorps agency website (americorps.gov 301s to www.americorps.gov).
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+        file: null
+      - path: /.well-known/openid-configuration
+        status: 404
+        file: null
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+        file: null
+      - path: /.well-known/oauth-protected-resource
+        status: 404
+        file: null
+      - path: /.well-known/api-catalog
+        status: 404
+        file: null
+      - path: /.well-known/ai-plugin.json
+        status: 404
+        file: null
+      - path: /.well-known/agent-card.json
+        status: 404
+        file: null
+      - path: /.well-known/agent.json
+        status: 404
+        file: null
+adjacent_machine_readable_documents:
+  note: >-
+    Not /.well-known/ documents, but discovered in the same pass and machine-readable. These
+    ARE served, and are the real discovery surface for this provider.
+  documents:
+    - path: /data.json
+      host: data.americorps.gov
+      status: 200
+      content_type: application/json
+      standard: DCAT-US 1.1 (Project Open Data)
+      description: >-
+        dcat:Catalog of 534 datasets, conformsTo https://project-open-data.cio.gov/v1.1/schema.
+    - path: /api/dcat.json
+      host: data.americorps.gov
+      status: 200
+      content_type: application/json
+      description: Socrata DCAT asset listing for the domain.
+    - path: /robots.txt
+      host: data.americorps.gov
+      status: 200
+      content_type: text/plain
+      description: >-
+        Declares a sitemap and Crawl-delay 1; disallows /api/odata/ and /OData.svc/ for
+        crawlers, which is also how the OData surface is discoverable at all.
+    - path: /robots.txt
+      host: www.americorps.gov
+      status: 200
+      content_type: text/plain
+    - path: /sitemap.xml
+      host: www.americorps.gov
+      status: 200
+      content_type: text/xml

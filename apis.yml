@@ -86,6 +86,8 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/americorps-catalog-api-openapi.yml
+  - type: Overlay
+    url: overlays/americorps-catalog-api-overlay.yaml
 - aid: americorps:americorps-datasets-api
   name: AmeriCorps Datasets API
   description: Retrieve dataset rows via the Socrata SODA resource endpoint.
@@ -96,6 +98,8 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/americorps-datasets-api-openapi.yml
+  - type: Overlay
+    url: overlays/americorps-datasets-api-overlay.yaml
 - aid: americorps:americorps-metadata-api
   name: AmeriCorps Metadata API
   description: Retrieve dataset metadata and schema information.
@@ -106,6 +110,8 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/americorps-metadata-api-openapi.yml
+  - type: Overlay
+    url: overlays/americorps-metadata-api-overlay.yaml
 common:
   - type: AgenticAccess
     url: agentic-access/americorps-agentic-access.yml
@@ -129,6 +135,44 @@ common:
   - type: GitHubOrganization
     url: https://github.com/americorps
     name: AmeriCorps GitHub
+  - type: DataCatalog
+    url: https://data.americorps.gov/data.json
+    name: AmeriCorps DCAT-US 1.1 Open Data Catalog
+  - type: PrivacyPolicy
+    url: https://www.americorps.gov/about/agency-overview/privacy-policy
+    name: AmeriCorps Privacy Policy
+  - type: Packages
+    url: packages/americorps-packages.yml
+  - type: WellKnownProbe
+    url: well-known/americorps-well-known.yml
+    name: /.well-known/ probe record (all paths 404 — an absence, not a surface)
+  - type: MCPServer
+    url: mcp/americorps-mcp.yml
+  - type: LLMsTxt
+    url: llms/americorps-llms.txt
+  - type: Conformance
+    url: conformance/americorps-conformance.yml
+  - type: ErrorCatalog
+    url: errors/americorps-problem-types.yml
+  - type: Lifecycle
+    url: lifecycle/americorps-lifecycle.yml
+  - type: StatusPage
+    url: https://status.socrata.com
+    name: Tyler Data & Insights (Socrata) platform status — covers the High Compliance US region this portal runs in
+  - type: Conventions
+    url: conventions/americorps-conventions.yml
+  - type: DataModel
+    url: data-model/americorps-data-model.yml
+  - type: Security
+    url: security/americorps-vulnerability-disclosure.yml
+  - type: VulnerabilityDisclosure
+    url: security/americorps-vulnerability-disclosure.yml
+  - type: AgentSkill
+    url: skills/_index.yml
+  - type: Plans
+    url: plans/americorps-plans-pricing.yml
+  - type: RateLimits
+    url: rate-limits/americorps-rate-limits.yml
   - type: Features
     data:
       - name: AmeriCorps State and National
@@ -189,8 +233,42 @@ common:
           AmeriCorps eGrants system for grantee organizations to submit applications,
           manage awards, and report on AmeriCorps program activities.
 created: '2024-11-21'
-modified: '2026-04-19'
+modified: '2026-09-02'
 maintainers:
   - FN: Kin Lane
     email: info@apievangelist.com
 specificationVersion: '0.23'
+
+x-pointer-verification:
+  checked: '2026-09-02'
+  method: probed
+  note: >-
+    Every common[] and properties[] URL pointer in this file was fetched with a browser
+    User-Agent on 2026-09-02 and returned HTTP 200. No dead pointer was found and none was
+    removed. Repo-relative artifact pointers are not fetched; they are verified to exist on
+    disk and to parse.
+  results:
+    - url: https://www.linkedin.com/company/americorps
+      status: 200
+    - url: https://americorps.gov
+      status: 200
+    - url: https://data.americorps.gov
+      status: 200
+    - url: https://data.americorps.gov/api/views
+      status: 200
+    - url: https://data.americorps.gov/data.json
+      status: 200
+    - url: https://dev.socrata.com/docs/endpoints.html
+      status: 200
+    - url: https://github.com/americorps
+      status: 200
+    - url: https://www.americorps.gov/about/agency-overview/privacy-policy
+      status: 200
+    - url: https://status.socrata.com
+      status: 200
+
+x-enrichment:
+  date: '2026-09-02'
+  status: enriched
+  artifacts_added: 16
+  pass: local-v1

@@ -1,0 +1,166 @@
+generated: '2026-09-02'
+method: probed
+source: >-
+  Live probes of data.americorps.gov 2026-09-02 (/data.json, /api/dcat.json,
+  /api/odata/v4/{4x4}, /api/views, /resource/{4x4}.json, response headers), the Socrata
+  developer documentation at dev.socrata.com that the portal's own API links point at, and
+  openapi/_original/americorps-openapi.yml.
+note: >-
+  AmeriCorps does not author its own API platform — data.americorps.gov runs on Socrata
+  (Tyler Data & Insights). Every conformance below is recorded against what the AmeriCorps
+  host actually serves, with the probed URL as evidence, regardless of who wrote the
+  software. Absences are recorded as conforms:false rather than omitted.
+conformance:
+  - id: dcat-us-1.1
+    name: DCAT-US 1.1 / Project Open Data (OMB M-13-13)
+    domain_standard: true
+    conforms: true
+    evidence:
+      url: https://data.americorps.gov/data.json
+      status: 200
+      content_type: application/json
+      detail: >-
+        Catalog declares "@context": "https://project-open-data.cio.gov/v1.1/schema/catalog.jsonld",
+        "@type": "dcat:Catalog" and "conformsTo": "https://project-open-data.cio.gov/v1.1/schema",
+        carrying 534 dcat:Dataset entries with bureauCode ("485:00"), programCode ("485:000"),
+        vcard:Contact contactPoint, accessLevel and distribution[].
+    why_it_matters: >-
+      This is the federal open-data domain standard. Any harvester that already speaks
+      DCAT-US — data.gov, a state catalog, a research index — ingests the whole AmeriCorps
+      catalog with no bespoke connector.
+  - id: odata-v4
+    name: OData Version 4.0
+    domain_standard: true
+    conforms: true
+    evidence:
+      url: https://data.americorps.gov/api/odata/v4/fzpw-9z8s
+      status: 200
+      content_type: application/json;odata.metadata=minimal
+      detail: >-
+        Response carries "@odata.context":
+        "https://data.americorps.gov/api/odata/v4/$metadata#fzpw-9z8s" and a "value" array;
+        an error on a malformed URI returns the OData error envelope
+        {"error":{"code":null,"message":"The URI is malformed."}} under the same
+        odata.metadata=minimal content type. data.americorps.gov/robots.txt independently
+        declares /api/odata/ and /OData.svc/ as real routes.
+    note: >-
+      This is the surface behind the "OData endpoints for Excel/Tableau/Power BI" claim in
+      the AmeriCorps portal description, and it is genuinely there. Note that the OData
+      representation types numeric columns as JSON numbers while the SODA /resource
+      representation returns the same columns as strings.
+  - id: soda-2.1
+    name: Socrata Open Data API (SODA) 2.1 / SoQL
+    domain_standard: true
+    conforms: true
+    evidence:
+      url: https://data.americorps.gov/resource/fzpw-9z8s.json?$limit=1
+      status: 200
+      detail: >-
+        Response carries the SODA 2 discovery headers X-SODA2-Fields, X-SODA2-Types,
+        X-SODA2-Data-Out-Of-Date and X-SODA2-Truth-Last-Modified, and accepts the SoQL
+        clauses $select/$where/$order/$group/$limit/$offset/$q.
+  - id: rfc9457
+    name: RFC 9457 Problem Details for HTTP APIs
+    conforms: false
+    evidence:
+      url: https://data.americorps.gov/resource/zzzz-zzzz.json
+      status: 404
+      detail: >-
+        Errors return application/json with a Socrata-proprietary envelope
+        ({"code","error","message","data"}), not application/problem+json. See
+        errors/americorps-problem-types.yml.
+  - id: oauth2
+    name: OAuth 2.0
+    conforms: false
+    evidence:
+      url: https://data.americorps.gov/.well-known/oauth-authorization-server
+      status: 404
+      detail: >-
+        No OAuth metadata document is served and the OpenAPI declares no oauth2
+        securityScheme. The public read API is anonymous with an optional X-App-Token.
+  - id: oidc
+    name: OpenID Connect Discovery
+    conforms: false
+    evidence:
+      url: https://data.americorps.gov/.well-known/openid-configuration
+      status: 404
+  - id: pagination
+    name: Offset/limit pagination
+    conforms: true
+    evidence:
+      url: https://data.americorps.gov/resource/fzpw-9z8s.json?$limit=2
+      status: 200
+      detail: >-
+        $limit/$offset on /resource, and limit/page on /api/views. Both documented at
+        dev.socrata.com/docs/queries/ and declared in the OpenAPI.
+  - id: idempotency
+    name: Idempotency keys
+    conforms: false
+    applicable: false
+    evidence:
+      url: openapi/_original/americorps-openapi.yml
+      status: null
+      detail: >-
+        Not applicable — every published operation is a GET. There is no write surface for an
+        idempotency key to protect.
+  - id: cors
+    name: Cross-origin resource sharing
+    conforms: true
+    evidence:
+      url: https://data.americorps.gov/api/views?limit=1
+      status: 200
+      detail: 'Access-Control-Allow-Origin: * on both /api/views and /resource responses.'
+  - id: http-caching
+    name: HTTP conditional requests (RFC 9110 ETag / Last-Modified)
+    conforms: true
+    evidence:
+      url: https://data.americorps.gov/resource/fzpw-9z8s.json?$limit=1
+      status: 200
+      detail: >-
+        Weak ETag plus Last-Modified are returned on /resource, alongside the SODA-specific
+        X-SODA2-Truth-Last-Modified and X-SODA2-Data-Out-Of-Date headers.
+  - id: hsts
+    name: HTTP Strict Transport Security (RFC 6797)
+    conforms: true
+    evidence:
+      url: https://data.americorps.gov/api/views?limit=1
+      status: 200
+      detail: 'Strict-Transport-Security: max-age=31536000; includeSubDomains.'
+  - id: fedramp
+    name: FedRAMP-authorized hosting
+    conforms: true
+    confidence: medium
+    scope: platform
+    evidence:
+      url: https://data.americorps.gov/api/views?limit=1
+      status: 200
+      detail: >-
+        Every response carries X-Socrata-Region: aws-us-east-1-fedramp-prod, and the platform
+        operator's status page (status.socrata.com, "Tyler Data & Insights System Status",
+        HTTP 200) enumerates a distinct "High Compliance - United States" region alongside
+        East-US and West-Europe.
+    note: >-
+      This is a PLATFORM property observed in the response, not a compliance program
+      AmeriCorps publishes. No `Compliance` pointer is wired into apis.yml on the strength of
+      it — AmeriCorps publishes no trust center, certification page or attestation report.
+  - id: rfc9116
+    name: RFC 9116 security.txt
+    conforms: false
+    evidence:
+      url: https://www.americorps.gov/.well-known/security.txt
+      status: 404
+      detail: >-
+        AmeriCorps publishes a full Vulnerability Disclosure Policy as HTML (CISA BOD 20-01)
+        but does not expose it as a security.txt. See
+        security/americorps-vulnerability-disclosure.yml.
+  - id: bod-20-01
+    name: CISA BOD 20-01 Vulnerability Disclosure Policy
+    domain_standard: true
+    conforms: true
+    evidence:
+      url: https://www.americorps.gov/about/agency-overview/vulnerability-disclosure-policy
+      status: 200
+      detail: >-
+        Published VDP with authorization/safe-harbor language, in-scope system and IP-range
+        enumeration, authorized and unauthorized test methods, a reporting channel and a
+        stated disclosure timeline.

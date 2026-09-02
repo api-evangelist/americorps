@@ -1,0 +1,162 @@
+generated: '2026-09-02'
+method: searched
+source: >-
+  dev.socrata.com/docs/endpoints.html, /docs/app-tokens.html, /docs/response-codes.html and
+  /docs/queries/ — the reference the AmeriCorps portal's own API link resolves to — combined
+  with response headers and bodies captured live from data.americorps.gov on 2026-09-02 and
+  the operations declared in openapi/_original/americorps-openapi.yml.
+docs: https://dev.socrata.com/docs/endpoints.html
+surface_shape:
+  read_only: true
+  operations: 4
+  write_operations: 0
+  detail: >-
+    Every published AmeriCorps operation is a GET. There is no create, update or delete on
+    the public surface, which is why idempotency, dry-run and reversibility below are all
+    `na` rather than absent.
+authentication:
+  style: optional-api-key
+  parameter: X-App-Token
+  location: header
+  anonymous_allowed: true
+  alternatives:
+    - '$$app_token query parameter (SODA 2.0/2.1 legacy)'
+    - app_token query parameter (SODA 1.0 legacy)
+  detail: >-
+    Anonymous calls succeed. A free Socrata application token is optional and its only effect
+    is throttling headroom — it grants no additional data. See
+    authentication/americorps-authentication.yml.
+identifiers:
+  scheme: Socrata four-by-four
+  pattern: '^[a-z0-9]{4}-[a-z0-9]{4}$'
+  example: fzpw-9z8s
+  detail: >-
+    Every dataset is addressed by a four-by-four. Resolve them from GET /api/views or from
+    /data.json rather than hard-coding — they are reissued when a dataset is republished.
+    Row-level identity on the OData representation is exposed as a `__id` field
+    (e.g. row-mkpg_v26k_z5g3); the SODA /resource representation does not return it.
+pagination:
+  style: limit-offset
+  resource_endpoint:
+    params:
+      - $limit
+      - $offset
+    max_limit: 50000
+    detail: >-
+      Declared in the OpenAPI as minimum 1, maximum 50000. Pair $limit/$offset with an
+      explicit $order clause — without a stable sort, paging across a mutating dataset can
+      repeat or skip rows.
+  catalog_endpoint:
+    params:
+      - limit
+      - page
+    max_limit: 200
+    detail: /api/views uses page-number paging, not offsets. Probed limit=1&page=2 returns 200.
+  response_envelope: >-
+    None. Both endpoints return a bare JSON array — there is no wrapper carrying a total
+    count, a next cursor or a has_more flag, so a client cannot tell from one response
+    whether more rows exist. Page until a short page comes back.
+filtering_and_projection:
+  language: SoQL (Socrata Query Language)
+  params:
+    - $select
+    - $where
+    - $order
+    - $group
+    - $limit
+    - $offset
+    - $q
+  detail: >-
+    $select is field projection (the sparse-fieldset equivalent), $q is full-text search,
+    $group supports server-side aggregation. All are declared in the OpenAPI.
+content_negotiation:
+  style: extension-in-path
+  formats:
+    - .json
+    - .csv
+    - .xml
+    - .rdf
+  detail: >-
+    Format is chosen by the path extension on /resource/{dataset_id}.{format}, not by an
+    Accept header. Only .json and .csv are declared in the OpenAPI; the portal advertises XML
+    and RDF as well.
+  type_fidelity_warning: >-
+    The SODA JSON representation returns NUMERIC columns as JSON STRINGS
+    ("all":"0.9035"), while the OData v4 representation of the same dataset returns them as
+    JSON numbers ("all":0.9035). A client that assumes numbers from /resource will fail. The
+    declared types are available in the X-SODA2-Types response header.
+caching:
+  etag: true
+  last_modified: true
+  conditional_requests: true
+  detail: >-
+    /resource returns a weak ETag and Last-Modified. Use If-None-Match / If-Modified-Since —
+    on a portal where most datasets change a few times a year this is the single largest
+    saving available to a polling client.
+  freshness_headers:
+    - X-SODA2-Truth-Last-Modified
+    - X-SODA2-Secondary-Last-Modified
+    - X-SODA2-Data-Out-Of-Date
+schema_discovery:
+  headers:
+    - X-SODA2-Fields
+    - X-SODA2-Types
+  detail: >-
+    Every /resource response self-describes its columns and their types in headers — e.g.
+    X-SODA2-Fields ["code","all","asn","nccc","vista"] with X-SODA2-Types
+    ["text","number","number","number","number"]. An agent can learn a dataset's shape from
+    one $limit=1 call without reading the metadata endpoint.
+request_tracing:
+  header: X-Socrata-RequestId
+  detail: >-
+    Returned on every response (e.g. e1dea932567e18ece55a9091801c750f). Quote it when
+    reporting a problem. X-Socrata-Region names the serving region
+    (aws-us-east-1-fedramp-prod).
+cors:
+  enabled: true
+  detail: 'Access-Control-Allow-Origin: * — the API is directly callable from a browser.'
+errors:
+  envelope: proprietary JSON, two shapes
+  media_type: application/json
+  rfc9457: false
+  see: errors/americorps-problem-types.yml
+rate_limit_signaling:
+  headers_returned: []
+  detail: >-
+    No X-RateLimit-*, RateLimit-* or Retry-After header was observed on any successful
+    unauthenticated response. The documented exhaustion status is 429. See
+    rate-limits/americorps-rate-limits.yml.
+versioning:
+  see: lifecycle/americorps-lifecycle.yml
+idempotency:
+  supported: na
+  detail: >-
+    Not applicable. Every operation is a GET and therefore idempotent by HTTP semantics;
+    there is no write to protect with an idempotency key, and no Idempotency-Key header is
+    accepted or needed. No `Idempotency` pointer is wired into apis.yml, because asserting
+    one on a read-only API would claim a safety property the provider never had to build.
+dry_run_mode:
+  supported: na
+  detail: >-
+    Not applicable — a read-only API has nothing to rehearse. No test/preview mode exists and
+    none is needed.
+reversibility:
+  applicable: false
+  grade: na
+  detail: >-
+    NOT APPLICABLE, and this is the honest answer rather than a zero. AmeriCorps publishes no
+    write surface: all four operations are GETs against a public open-data portal, so no call
+    an agent makes here changes any state that could need reversing. There is nothing to
+    cancel, refund, void, undo or restore, and no window to state.
+  write_surfaces: []
+  note: >-
+    The Socrata platform underneath does have a publishing API with revision and rollback
+    semantics, but AmeriCorps does not expose it publicly and it is not part of this
+    provider's contract. It is deliberately NOT recorded as a reversal path here — crediting
+    a reversibility window on a surface a consumer cannot reach would be a false claim.
+cross_references:
+  errors: errors/americorps-problem-types.yml
+  lifecycle: lifecycle/americorps-lifecycle.yml
+  authentication: authentication/americorps-authentication.yml
+  rate_limits: rate-limits/americorps-rate-limits.yml
+  conformance: conformance/americorps-conformance.yml

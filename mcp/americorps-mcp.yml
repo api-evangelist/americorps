@@ -1,0 +1,71 @@
+generated: '2026-09-02'
+method: derived
+source: >-
+  Derived from openapi/_original/americorps-openapi.yml after searching for a published
+  server: probed https://data.americorps.gov/mcp (404), every /.well-known/ path on both
+  AmeriCorps hosts (all 404), and checked github.com/AmeriCorps (one empty `.github` repo).
+  No AmeriCorps or Socrata MCP server was found.
+status: candidate
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: none
+  verified: probed
+note: >-
+  AmeriCorps ships no MCP server, hosted or local, and neither does Socrata / Tyler Data &
+  Insights for the SODA platform underneath it. The tools below are a CANDIDATE mapping we
+  derived from the four real OpenAPI operations — they describe what a server WOULD expose,
+  not a surface an agent can call today. Nothing here is a live endpoint and no endpoint URL
+  has been invented.
+  The API itself is anonymously callable over plain HTTPS (an optional X-App-Token raises
+  throttling headroom), so an agent framework can reach it through a generic OpenAPI tool
+  adapter without a purpose-built MCP server.
+surfaces:
+  openapi: openapi/_original/americorps-openapi.yml
+  base_url: https://data.americorps.gov
+  auth: Optional Socrata application token in the X-App-Token header; anonymous access allowed.
+tools:
+  - name: list_datasets
+    description: >-
+      List every dataset, view, chart and asset published on the AmeriCorps open data
+      portal, returning the four-by-four identifiers needed for every other call.
+    rest:
+      - listViews
+    method: GET
+    path: /api/views
+    consequence: read
+    inputSchema_source: openapi listViews parameters (limit, page)
+  - name: get_dataset_metadata
+    description: >-
+      Retrieve the metadata record for one AmeriCorps dataset — name, description, category,
+      tags, columns, owner attribution and last-updated timestamps.
+    rest:
+      - getViewMetadata
+    method: GET
+    path: /api/views/{dataset_id}.json
+    consequence: read
+    inputSchema_source: openapi getViewMetadata parameters (dataset_id)
+  - name: query_dataset
+    description: >-
+      Query rows from an AmeriCorps dataset as JSON using SoQL ($select, $where, $order,
+      $group, $limit, $offset, $q).
+    rest:
+      - getDatasetJson
+    method: GET
+    path: /resource/{dataset_id}.json
+    consequence: read
+    inputSchema_source: openapi getDatasetJson parameters
+  - name: export_dataset_csv
+    description: Export rows from an AmeriCorps dataset as CSV for bulk analysis.
+    rest:
+      - getDatasetCsv
+    method: GET
+    path: /resource/{dataset_id}.csv
+    consequence: read
+    inputSchema_source: openapi getDatasetCsv parameters
+coverage:
+  openapi_operations: 4
+  tools_derived: 4
+  write_operations: 0

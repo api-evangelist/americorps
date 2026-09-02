@@ -1,0 +1,93 @@
+# AmeriCorps
+
+> AmeriCorps is the U.S. federal agency for national service and volunteerism. Its public
+> API surface is the AmeriCorps Open Data portal at data.americorps.gov, a Socrata (Tyler
+> Data & Insights) instance running in a FedRAMP region, publishing 534 public datasets of
+> research, evaluation and program data. Everything is free, anonymously callable over
+> HTTPS, and read-only.
+
+Generated: 2026-09-02
+Method: generated (from apis.yml and the artifacts in this repository, plus live probes of
+data.americorps.gov on 2026-09-02). AmeriCorps does not publish an llms.txt — probed
+https://data.americorps.gov/llms.txt (404) and https://www.americorps.gov/llms.txt (404).
+
+## What you can actually call
+
+Base URL: https://data.americorps.gov
+Auth: none required. An optional free Socrata application token in the `X-App-Token` header
+raises throttling headroom and grants no additional data.
+Write operations: none. Every operation is a GET.
+
+- [List datasets](https://data.americorps.gov/api/views): `GET /api/views?limit=&page=` —
+  operationId `listViews`. Returns every dataset/view/asset with its four-by-four `id`.
+- [Dataset metadata](https://data.americorps.gov/api/views/fzpw-9z8s.json):
+  `GET /api/views/{dataset_id}.json` — operationId `getViewMetadata`. Columns, description,
+  tags, update timestamps.
+- [Query a dataset (JSON)](https://data.americorps.gov/resource/fzpw-9z8s.json):
+  `GET /resource/{dataset_id}.json` — operationId `getDatasetJson`. SoQL parameters
+  `$select`, `$where`, `$order`, `$group`, `$limit` (max 50000), `$offset`, `$q`.
+- [Query a dataset (CSV)](https://data.americorps.gov/resource/fzpw-9z8s.csv):
+  `GET /resource/{dataset_id}.csv` — operationId `getDatasetCsv`. Use this for bulk pulls.
+
+## Machine-readable discovery
+
+- [DCAT-US 1.1 catalog](https://data.americorps.gov/data.json) — 534 `dcat:Dataset` entries,
+  `conformsTo` https://project-open-data.cio.gov/v1.1/schema. The richest description of the
+  catalog and the best single starting point.
+- [Socrata DCAT listing](https://data.americorps.gov/api/dcat.json)
+- [OData v4](https://data.americorps.gov/api/odata/v4/fzpw-9z8s) — same rows, typed as real
+  JSON numbers rather than strings. This is the surface behind the portal's Excel / Tableau /
+  Power BI connection claim.
+- [robots.txt](https://data.americorps.gov/robots.txt) — declares `Crawl-delay: 1`.
+
+## Things that will trip you up
+
+- Dataset identifiers are Socrata four-by-fours matching `^[a-z0-9]{4}-[a-z0-9]{4}$`. Resolve
+  them from `/api/views` or `/data.json`; do not hard-code them.
+- `/resource` returns numeric columns as JSON **strings** (`"all":"0.9035"`). The OData v4
+  representation returns the same columns as numbers. Check `X-SODA2-Types` for the declared
+  type of each field.
+- Responses are bare JSON arrays. There is no envelope, no total count and no next cursor —
+  page with `$limit`/`$offset` (and an explicit `$order`, or paging can repeat rows) until a
+  short page comes back.
+- Two different error envelopes. A missing dataset returns
+  `{"code":"dataset.missing","error":true,"message":"Not found","data":{...}}`; a bad SoQL
+  clause returns `{"message":"Query coordinator error: ...","errorCode":"query.soql.no-such-column","data":{...}}`.
+  Note `code` versus `errorCode`. Neither is RFC 9457 problem+json.
+- No rate-limit headers are returned at all. The documented exhaustion status is 429 and the
+  documented remedy is to register a free app token. There is no published number for any
+  limit — you cannot see your budget until you exceed it.
+- Use conditional requests. `/resource` returns `ETag` and `Last-Modified`, and most
+  AmeriCorps datasets change a few times a year.
+- `X-SODA2-Fields` and `X-SODA2-Types` on any `$limit=1` call tell you a dataset's whole
+  shape without a second request.
+
+## What AmeriCorps does NOT publish
+
+- No MCP server, hosted or local.
+- No A2A agent card at any `/.well-known/` path on either host (all probed, all 404).
+- No `security.txt`, `openid-configuration`, `oauth-authorization-server`, `api-catalog` or
+  `ai-plugin.json`.
+- No first-party SDK in any package registry. The GitHub org github.com/AmeriCorps holds one
+  empty `.github` repository.
+- No pricing, plans, signup or paid tier — this is public-domain federal open data.
+- No API changelog, deprecation policy, `Sunset`/`Deprecation` headers, or SLA.
+
+## Policies and contacts
+
+- [Vulnerability Disclosure Policy](https://www.americorps.gov/about/agency-overview/vulnerability-disclosure-policy)
+  — CISA BOD 20-01, with safe-harbor authorization. Report to oithd@cns.gov or +1-202-606-6600.
+  Note: `data.americorps.gov` is not named in the policy's in-scope domain list.
+- [Privacy Policy](https://www.americorps.gov/about/agency-overview/privacy-policy)
+- Catalog contact: Evaluation@americorps.gov (AmeriCorps Office of Research and Evaluation).
+- Platform status: https://status.socrata.com — the portal runs in the "High Compliance -
+  United States" region. Operated by the platform vendor, not by AmeriCorps.
+
+## Reference
+
+- [Socrata SODA endpoint reference](https://dev.socrata.com/docs/endpoints.html)
+- [Application tokens](https://dev.socrata.com/docs/app-tokens.html)
+- [SoQL queries](https://dev.socrata.com/docs/queries/)
+- [HTTP status codes and error envelope](https://dev.socrata.com/docs/response-codes.html)
+- [AmeriCorps Open Data portal](https://data.americorps.gov)
+- [AmeriCorps](https://www.americorps.gov)
