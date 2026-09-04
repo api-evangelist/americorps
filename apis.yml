@@ -41,17 +41,19 @@ deliveryModel:
   generated: '2026-08-28'
   method: derived
 accessModel:
-  pricing: freemium
-  onboarding: self-serve
+  pricing: paid
+  onboarding: unknown
   trial: false
-  try_now: true
+  try_now: false
   public: false
-  label: Freemium · Self-serve signup
+  label: Paid
   confidence: high
   source:
-  - plans
+  - finops
   - authentication
-  generated: '2026-07-22'
+  - rate-limits
+  - security
+  generated: '2026-09-03'
   method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/americorps.png
 access: 3rd-Party
@@ -146,8 +148,9 @@ common:
   - type: WellKnownProbe
     url: well-known/americorps-well-known.yml
     name: /.well-known/ probe record (all paths 404 — an absence, not a surface)
-  - type: MCPServer
+  - type: X-MCPServerCandidate
     url: mcp/americorps-mcp.yml
+    note: 'Renamed from MCPServer 2026-09-03 (roadmap#247): the manifest self-describes as status: candidate — a tool list derived from the published API contracts, not an existing server. The scorer already read the manifest and reported mcp_server correctly; the MCPServer type was crediting the artifact-type surfaces with a server that does not exist.'
   - type: LLMsTxt
     url: llms/americorps-llms.txt
   - type: Conformance
