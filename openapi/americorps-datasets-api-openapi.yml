@@ -1,25 +1,12 @@
 openapi: 3.2.0
 info:
-  title: AmeriCorps Open Data Catalog Datasets API
+  title: AmeriCorps Open Data Datasets API
   version: 1.0.0
   description: 'AmeriCorps publishes research, evaluation, and program data through its open
 
     data portal at https://data.americorps.gov, which is built on the Socrata
 
-    Open Data (SODA) platform. Datasets are accessible programmatically through
-
-    the standard Socrata views and resource endpoints.
-
-
-    Each dataset is identified by a four-by-four (`xxxx-xxxx`) identifier and can
-
-    be queried via the `/resource/{dataset_id}.{format}` endpoint using SoQL
-
-    (Socrata Query Language) parameters such as `$select`, `$where`, `$order`,
-
-    `$limit`, and `$offset`.
-
-    '
+    Open Data (SODA) platform.'
   contact:
     name: AmeriCorps Open Data
     url: https://data.americorps.gov
@@ -42,9 +29,7 @@ paths:
 
         SODA SoQL query parameters (`$select`, `$where`, `$order`, `$group`,
 
-        `$limit`, `$offset`, `$q`).
-
-        '
+        `$limit`, `$offset`, `$q`).'
       operationId: getDatasetJson
       parameters:
       - $ref: '#/components/parameters/DatasetId'
@@ -92,14 +77,29 @@ paths:
                 type: string
 components:
   parameters:
-    DatasetId:
-      name: dataset_id
-      in: path
-      required: true
-      description: Socrata four-by-four dataset identifier (e.g. `bkv2-68b9`).
+    SoqlLimit:
+      name: $limit
+      in: query
+      required: false
+      description: Maximum number of rows to return (default 1000, max 50000).
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 50000
+    SoqlQ:
+      name: $q
+      in: query
+      required: false
+      description: Full-text search query.
       schema:
         type: string
-        pattern: ^[a-z0-9]{4}-[a-z0-9]{4}$
+    SoqlGroup:
+      name: $group
+      in: query
+      required: false
+      description: SoQL `$group` clause for aggregations.
+      schema:
+        type: string
     SoqlSelect:
       name: $select
       in: query
@@ -114,6 +114,13 @@ components:
       description: SoQL `$order` clause for sorting results.
       schema:
         type: string
+    SoqlWhere:
+      name: $where
+      in: query
+      required: false
+      description: SoQL `$where` filter clause.
+      schema:
+        type: string
     SoqlOffset:
       name: $offset
       in: query
@@ -122,36 +129,14 @@ components:
       schema:
         type: integer
         minimum: 0
-    SoqlGroup:
-      name: $group
-      in: query
-      required: false
-      description: SoQL `$group` clause for aggregations.
+    DatasetId:
+      name: dataset_id
+      in: path
+      required: true
+      description: Socrata four-by-four dataset identifier (e.g. `bkv2-68b9`).
       schema:
         type: string
-    SoqlQ:
-      name: $q
-      in: query
-      required: false
-      description: Full-text search query.
-      schema:
-        type: string
-    SoqlLimit:
-      name: $limit
-      in: query
-      required: false
-      description: Maximum number of rows to return (default 1000, max 50000).
-      schema:
-        type: integer
-        minimum: 1
-        maximum: 50000
-    SoqlWhere:
-      name: $where
-      in: query
-      required: false
-      description: SoQL `$where` filter clause.
-      schema:
-        type: string
+        pattern: ^[a-z0-9]{4}-[a-z0-9]{4}$
   securitySchemes:
     SocrataAppToken:
       type: apiKey

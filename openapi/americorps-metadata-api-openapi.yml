@@ -1,25 +1,12 @@
 openapi: 3.2.0
 info:
-  title: AmeriCorps Open Data Catalog Metadata API
+  title: AmeriCorps Open Data Metadata API
   version: 1.0.0
   description: 'AmeriCorps publishes research, evaluation, and program data through its open
 
     data portal at https://data.americorps.gov, which is built on the Socrata
 
-    Open Data (SODA) platform. Datasets are accessible programmatically through
-
-    the standard Socrata views and resource endpoints.
-
-
-    Each dataset is identified by a four-by-four (`xxxx-xxxx`) identifier and can
-
-    be queried via the `/resource/{dataset_id}.{format}` endpoint using SoQL
-
-    (Socrata Query Language) parameters such as `$select`, `$where`, `$order`,
-
-    `$limit`, and `$offset`.
-
-    '
+    Open Data (SODA) platform.'
   contact:
     name: AmeriCorps Open Data
     url: https://data.americorps.gov
@@ -40,9 +27,7 @@ paths:
       summary: Get dataset metadata
       description: 'Returns the metadata record for a single dataset, including its columns,
 
-        description, tags, and update cadence.
-
-        '
+        description, tags, and update cadence.'
       operationId: getViewMetadata
       parameters:
       - $ref: '#/components/parameters/DatasetId'
@@ -56,6 +41,15 @@ paths:
         '404':
           description: Dataset not found.
 components:
+  parameters:
+    DatasetId:
+      name: dataset_id
+      in: path
+      required: true
+      description: Socrata four-by-four dataset identifier (e.g. `bkv2-68b9`).
+      schema:
+        type: string
+        pattern: ^[a-z0-9]{4}-[a-z0-9]{4}$
   schemas:
     View:
       type: object
@@ -90,15 +84,6 @@ components:
             type: object
             additionalProperties: true
       additionalProperties: true
-  parameters:
-    DatasetId:
-      name: dataset_id
-      in: path
-      required: true
-      description: Socrata four-by-four dataset identifier (e.g. `bkv2-68b9`).
-      schema:
-        type: string
-        pattern: ^[a-z0-9]{4}-[a-z0-9]{4}$
   securitySchemes:
     SocrataAppToken:
       type: apiKey

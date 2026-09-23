@@ -1,9 +1,7 @@
 {
   "provider": "americorps",
   "sources": [
-    "americorps-catalog-api-openapi.yml",
-    "americorps-datasets-api-openapi.yml",
-    "americorps-metadata-api-openapi.yml"
+    "_original/americorps-openapi.yml"
   ],
   "outputs": [
     "americorps-catalog-api-openapi.yml",
@@ -14,10 +12,13 @@
   "errors": [],
   "warnings": [],
   "notes": [
-    "americorps-catalog-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "americorps-datasets-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "americorps-metadata-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "americorps-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
     "apis.yml register: already-registered"
   ],
-  "skipped": []
+  "skipped": [
+    "americorps-catalog-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "americorps-datasets-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "americorps-metadata-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }
