@@ -77,27 +77,11 @@ paths:
                 type: string
 components:
   parameters:
-    SoqlLimit:
-      name: $limit
+    SoqlWhere:
+      name: $where
       in: query
       required: false
-      description: Maximum number of rows to return (default 1000, max 50000).
-      schema:
-        type: integer
-        minimum: 1
-        maximum: 50000
-    SoqlQ:
-      name: $q
-      in: query
-      required: false
-      description: Full-text search query.
-      schema:
-        type: string
-    SoqlGroup:
-      name: $group
-      in: query
-      required: false
-      description: SoQL `$group` clause for aggregations.
+      description: SoQL `$where` filter clause.
       schema:
         type: string
     SoqlSelect:
@@ -107,28 +91,13 @@ components:
       description: SoQL `$select` clause specifying which columns to return.
       schema:
         type: string
-    SoqlOrder:
-      name: $order
+    SoqlQ:
+      name: $q
       in: query
       required: false
-      description: SoQL `$order` clause for sorting results.
+      description: Full-text search query.
       schema:
         type: string
-    SoqlWhere:
-      name: $where
-      in: query
-      required: false
-      description: SoQL `$where` filter clause.
-      schema:
-        type: string
-    SoqlOffset:
-      name: $offset
-      in: query
-      required: false
-      description: Row offset for paginating results.
-      schema:
-        type: integer
-        minimum: 0
     DatasetId:
       name: dataset_id
       in: path
@@ -137,6 +106,37 @@ components:
       schema:
         type: string
         pattern: ^[a-z0-9]{4}-[a-z0-9]{4}$
+    SoqlOffset:
+      name: $offset
+      in: query
+      required: false
+      description: Row offset for paginating results.
+      schema:
+        type: integer
+        minimum: 0
+    SoqlGroup:
+      name: $group
+      in: query
+      required: false
+      description: SoQL `$group` clause for aggregations.
+      schema:
+        type: string
+    SoqlLimit:
+      name: $limit
+      in: query
+      required: false
+      description: Maximum number of rows to return (default 1000, max 50000).
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 50000
+    SoqlOrder:
+      name: $order
+      in: query
+      required: false
+      description: SoQL `$order` clause for sorting results.
+      schema:
+        type: string
   securitySchemes:
     SocrataAppToken:
       type: apiKey
