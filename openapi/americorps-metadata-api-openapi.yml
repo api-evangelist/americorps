@@ -41,15 +41,6 @@ paths:
         '404':
           description: Dataset not found.
 components:
-  parameters:
-    DatasetId:
-      name: dataset_id
-      in: path
-      required: true
-      description: Socrata four-by-four dataset identifier (e.g. `bkv2-68b9`).
-      schema:
-        type: string
-        pattern: ^[a-z0-9]{4}-[a-z0-9]{4}$
   schemas:
     View:
       type: object
@@ -84,6 +75,15 @@ components:
             type: object
             additionalProperties: true
       additionalProperties: true
+  parameters:
+    DatasetId:
+      name: dataset_id
+      in: path
+      required: true
+      description: Socrata four-by-four dataset identifier (e.g. `bkv2-68b9`).
+      schema:
+        type: string
+        pattern: ^[a-z0-9]{4}-[a-z0-9]{4}$
   securitySchemes:
     SocrataAppToken:
       type: apiKey

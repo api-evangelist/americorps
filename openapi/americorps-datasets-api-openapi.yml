@@ -77,20 +77,6 @@ paths:
                 type: string
 components:
   parameters:
-    SoqlGroup:
-      name: $group
-      in: query
-      required: false
-      description: SoQL `$group` clause for aggregations.
-      schema:
-        type: string
-    SoqlWhere:
-      name: $where
-      in: query
-      required: false
-      description: SoQL `$where` filter clause.
-      schema:
-        type: string
     SoqlLimit:
       name: $limit
       in: query
@@ -100,14 +86,13 @@ components:
         type: integer
         minimum: 1
         maximum: 50000
-    DatasetId:
-      name: dataset_id
-      in: path
-      required: true
-      description: Socrata four-by-four dataset identifier (e.g. `bkv2-68b9`).
+    SoqlGroup:
+      name: $group
+      in: query
+      required: false
+      description: SoQL `$group` clause for aggregations.
       schema:
         type: string
-        pattern: ^[a-z0-9]{4}-[a-z0-9]{4}$
     SoqlQ:
       name: $q
       in: query
@@ -115,11 +100,11 @@ components:
       description: Full-text search query.
       schema:
         type: string
-    SoqlOrder:
-      name: $order
+    SoqlSelect:
+      name: $select
       in: query
       required: false
-      description: SoQL `$order` clause for sorting results.
+      description: SoQL `$select` clause specifying which columns to return.
       schema:
         type: string
     SoqlOffset:
@@ -130,11 +115,26 @@ components:
       schema:
         type: integer
         minimum: 0
-    SoqlSelect:
-      name: $select
+    SoqlOrder:
+      name: $order
       in: query
       required: false
-      description: SoQL `$select` clause specifying which columns to return.
+      description: SoQL `$order` clause for sorting results.
+      schema:
+        type: string
+    DatasetId:
+      name: dataset_id
+      in: path
+      required: true
+      description: Socrata four-by-four dataset identifier (e.g. `bkv2-68b9`).
+      schema:
+        type: string
+        pattern: ^[a-z0-9]{4}-[a-z0-9]{4}$
+    SoqlWhere:
+      name: $where
+      in: query
+      required: false
+      description: SoQL `$where` filter clause.
       schema:
         type: string
   securitySchemes:
