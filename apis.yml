@@ -116,6 +116,8 @@ apis:
   - type: Overlay
     url: overlays/americorps-metadata-api-overlay.yaml
 common:
+  - type: FinOps
+    url: finops/americorps-finops.yml
   - type: AgenticAccess
     url: agentic-access/americorps-agentic-access.yml
   - type: DomainSecurity
