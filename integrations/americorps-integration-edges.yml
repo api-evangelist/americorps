@@ -1,0 +1,28 @@
+edges:
+- partner_name: Socrata (Tyler Technologies Data & Insights)
+  partner: socrata
+  partner_match: domain
+  type: contract
+  direction: provider-built
+  channel: provider-built
+  relationship: core-infrastructure
+  evidence: https://github.com/api-evangelist/americorps/blob/main/openapi/americorps-catalog-api-openapi.yml#L7
+  quote: data portal at https://data.americorps.gov, which is built on the Socrata
+  contract_reference:
+    spec_file: openapi/americorps-catalog-api-openapi.yml
+    repo: americorps
+    role: open-data-portal-platform
+    detected_by: sweep-gov-open-data.py
+    detected: '2026-10-15'
+  note: the provider's own contract says its open-data portal is served on Socrata (SODA); a hosted platform, not
+    a re-served shape
+  detected_by: sweep-gov-open-data.py
+  first_seen: '2026-10-15'
+generated: '2026-10-15'
+method: searched
+checked:
+- 'https://api.gouv.fr/api/v1/apis (200 text/html: not machine-readable)'
+- 'https://catalog.data.gov/api/3/action/package_search (404; GSA mirror keyed: 403 API_KEY_MISSING)'
+- https://raw.githubusercontent.com/co-cddo/api-catalogue/main/data/catalogue.csv
+source:
+- https://raw.githubusercontent.com/co-cddo/api-catalogue/main/data/catalogue.csv
