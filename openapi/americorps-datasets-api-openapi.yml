@@ -77,49 +77,11 @@ paths:
                 type: string
 components:
   parameters:
-    SoqlLimit:
-      name: $limit
-      in: query
-      required: false
-      description: Maximum number of rows to return (default 1000, max 50000).
-      schema:
-        type: integer
-        minimum: 1
-        maximum: 50000
-    SoqlGroup:
-      name: $group
-      in: query
-      required: false
-      description: SoQL `$group` clause for aggregations.
-      schema:
-        type: string
     SoqlQ:
       name: $q
       in: query
       required: false
       description: Full-text search query.
-      schema:
-        type: string
-    SoqlSelect:
-      name: $select
-      in: query
-      required: false
-      description: SoQL `$select` clause specifying which columns to return.
-      schema:
-        type: string
-    SoqlOffset:
-      name: $offset
-      in: query
-      required: false
-      description: Row offset for paginating results.
-      schema:
-        type: integer
-        minimum: 0
-    SoqlOrder:
-      name: $order
-      in: query
-      required: false
-      description: SoQL `$order` clause for sorting results.
       schema:
         type: string
     DatasetId:
@@ -135,6 +97,44 @@ components:
       in: query
       required: false
       description: SoQL `$where` filter clause.
+      schema:
+        type: string
+    SoqlOrder:
+      name: $order
+      in: query
+      required: false
+      description: SoQL `$order` clause for sorting results.
+      schema:
+        type: string
+    SoqlLimit:
+      name: $limit
+      in: query
+      required: false
+      description: Maximum number of rows to return (default 1000, max 50000).
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 50000
+    SoqlOffset:
+      name: $offset
+      in: query
+      required: false
+      description: Row offset for paginating results.
+      schema:
+        type: integer
+        minimum: 0
+    SoqlSelect:
+      name: $select
+      in: query
+      required: false
+      description: SoQL `$select` clause specifying which columns to return.
+      schema:
+        type: string
+    SoqlGroup:
+      name: $group
+      in: query
+      required: false
+      description: SoQL `$group` clause for aggregations.
       schema:
         type: string
   securitySchemes:
