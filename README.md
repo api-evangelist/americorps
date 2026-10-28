@@ -1,4 +1,4 @@
-# AmeriCorps (americorps)
+# AmeriCorps
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -66,65 +66,137 @@
 
 AmeriCorps is a federal agency that engages millions of Americans in service to their communities through programs including AmeriCorps State and National, AmeriCorps VISTA, AmeriCorps NCCC, AmeriCorps Seniors, and the Volunteer Generation Fund. Established in 1993 under the Corporation for National and Community Service (CNCS), AmeriCorps addresses critical community needs in education, disaster response, environmental conservation, economic opportunity, and healthy futures. The agency operates the AmeriCorps Open Data portal (data.americorps.gov) providing programmatic access to research, evaluation, and program data via the Socrata Open Data API (SODA).
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/americorps/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/americorps/refs/heads/main/apis.yml)
+**Areas:** Federal Government · National Service · Volunteerism · Community Development · Civic Engagement · Education · Disaster Response · Environmental Conservation
 
-## Scope
+## AmeriCorps on APIs.io
 
-- **Type:** Index
-- **Access:** 3rd-Party
+Everything profiled for AmeriCorps is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/americorps/](https://apis.io/providers/americorps/)** — or go straight to one of the APIs or properties below.
 
-## Tags
+### APIs (4)
 
-- Federal Government
-- National Service
-- Volunteerism
-- Community Development
-- Civic Engagement
-- Education
-- Disaster Response
-- Environmental Conservation
+- [AmeriCorps Open Data SODA API](https://apis.io/apis/americorps/americorps-open-data-soda-api/) — The AmeriCorps Open Data portal provides programmatic access to AmeriCorps research, evaluation, and program datasets via the Socrata Open Data API (SODA).…
+- [AmeriCorps Catalog API](https://apis.io/apis/americorps/americorps-catalog-api/) — Discover datasets published on the AmeriCorps open data portal.
+- [AmeriCorps Datasets API](https://apis.io/apis/americorps/americorps-datasets-api/) — Retrieve dataset rows via the Socrata SODA resource endpoint.
+- [AmeriCorps Metadata API](https://apis.io/apis/americorps/americorps-metadata-api/) — Retrieve dataset metadata and schema information.
 
-## Timestamps
+### Published properties
 
-- **Created:** 2024-11-21
-- **Modified:** 2026-04-19
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-## APIs
+#### MCP servers (1)
 
-### AmeriCorps Open Data SODA API
+Model Context Protocol servers that expose the API to agents.
 
-The AmeriCorps Open Data portal provides programmatic access to AmeriCorps research, evaluation, and program datasets via the Socrata Open Data API (SODA). The portal includes datasets on program outcomes, member experiences, return on investment studies, evidence snapshots for each AmeriCorps program, and evaluation reports. Data is available in JSON, CSV, XML, and RDF formats, with OData endpoints for connecting to tools like Excel and Tableau.
+- [americorps-mcp.yml](https://apis.io/servers/americorps/americorps-mcp-yml/)
 
-- **Human URL:** [https://data.americorps.gov](https://data.americorps.gov)
-- **Base URL:** `https://data.americorps.gov/resource`
+#### Agentic access (1)
 
-#### Tags
+Which operations an agent can call, which act, and which need a human in the loop.
 
-- Open Data
-- Research
-- Evaluation
-- National Service
+- [Americorps Agentic Access](https://apis.io/agentic-access/americorps/americorps-agentic-access/)
 
-#### Properties
+#### Collections (4)
 
-- [Documentation](https://data.americorps.gov)
-- [Data A P I](https://data.americorps.gov/api/views)
-- [Postman Collection](collections/americorps.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/americorps.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+Postman and Open Collection request collections.
 
-## Common Properties
+- [AmeriCorps Open Data API](https://apis.io/collections/americorps/open-americorps/)
+- [AmeriCorps Open Data Catalog API](https://apis.io/collections/americorps/open-americorps-catalog-api/)
+- [AmeriCorps Open Data Catalog Datasets API](https://apis.io/collections/americorps/open-americorps-datasets-api/)
+- [AmeriCorps Open Data Catalog Metadata API](https://apis.io/collections/americorps/open-americorps-metadata-api/)
 
-- [LinkedIn](https://www.linkedin.com/company/americorps)
+#### Overlays (3)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Americorps Catalog Api Overlay](https://apis.io/overlays/americorps/americorps-catalog-api-overlay/)
+- [Americorps Datasets Api Overlay](https://apis.io/overlays/americorps/americorps-datasets-api-overlay/)
+- [Americorps Metadata Api Overlay](https://apis.io/overlays/americorps/americorps-metadata-api-overlay/)
+
+#### Security (3)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Americorps Authentication](https://apis.io/security/americorps/americorps-authentication/)
+- [Americorps Domain Security](https://apis.io/security/americorps/americorps-domain-security/)
+- [Americorps Vulnerability Disclosure](https://apis.io/security/americorps/americorps-vulnerability-disclosure/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Americorps Plans Pricing](https://apis.io/plans/americorps/americorps-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Americorps Rate Limits](https://apis.io/rate-limits/americorps/americorps-rate-limits/)
+
+#### FinOps (1)
+
+What the API costs to run, by operation.
+
+- [Americorps Finops](https://apis.io/finops/americorps/americorps-finops/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
 - [Website](https://americorps.gov)
-- [Portal](https://data.americorps.gov)
-- [Data A P I](https://data.americorps.gov/api/views)
-- [Getting Started](https://dev.socrata.com/docs/endpoints.html)
-- [GitHub Organization](https://github.com/americorps)
-- [Features](undefined)
-- [Use Cases](undefined)
-- [Integrations](undefined)
+- [Getting started](https://dev.socrata.com/docs/endpoints.html)
+- [Privacy policy](https://www.americorps.gov/about/agency-overview/privacy-policy)
+- [GitHub](https://github.com/americorps)
+- [Status](https://status.socrata.com)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
-**Email:** info@apievangelist.com
+**Kin Score 38.1** — thin · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 73.2 |
+| Contract quality | 50.6 |
+| Contract governance | 18.2 |
+| Operational transparency | 28.9 |
+| Developer ergonomics | 44.6 |
+| Access clarity | 10.5 |
+
+**Agent readiness 27.3** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | na |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | na |
+| Error Semantics | documented (partial credit) |
+| OpenAPI Examples | — |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | na |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 26.5** — Education & Research
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/americorps/](https://apis.io/providers/americorps/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for AmeriCorps: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/americorps/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
